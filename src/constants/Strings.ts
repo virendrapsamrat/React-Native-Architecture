@@ -1,5 +1,7 @@
+import { brandConfig } from '../config/brandConfig';
+
 export const Strings = {
-  appName: 'RN Architecture App',
+  appName: brandConfig.appName ?? 'RN Architecture App',
   login: 'Login',
   signup: 'Sign Up',
   email: 'Email',

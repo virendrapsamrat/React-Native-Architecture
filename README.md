@@ -91,6 +91,28 @@ Create a `.env` file in the project root:
 ```
 EXPO_PUBLIC_API_URL=https://your-api.com
 EXPO_PUBLIC_ENV=development
+EXPO_PUBLIC_BRAND=default
+EXPO_PUBLIC_APP_NAME=My App
+EXPO_PUBLIC_APP_SLUG=my-app
+EXPO_PUBLIC_APP_ICON=./assets/icon.png
+EXPO_PUBLIC_SPLASH_IMAGE=./assets/splash-icon.png
+EXPO_PUBLIC_IOS_BUNDLE_IDENTIFIER=com.example.myapp
+EXPO_PUBLIC_ANDROID_PACKAGE=com.example.myapp
+```
+
+### White-label / brand builds
+
+This project supports per-brand Expo configuration through `app.config.ts`.
+- Set `EXPO_PUBLIC_BRAND` to the brand key you want to use.
+- Add brand metadata under `brandMeta` in `app.config.ts`.
+- Override any default value with the `EXPO_PUBLIC_*` variables.
+
+Example build commands:
+
+```bash
+EXPO_PUBLIC_BRAND=default npm run start
+EXPO_PUBLIC_BRAND=default npm run build:brand:ios
+EXPO_PUBLIC_BRAND=default npm run build:brand:android
 ```
 
 ## Project Conventions

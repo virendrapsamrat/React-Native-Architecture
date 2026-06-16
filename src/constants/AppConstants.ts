@@ -1,5 +1,7 @@
+import { brandConfig } from '../config/brandConfig';
+
 export const AppConstants = {
-  APP_NAME: 'RN Architecture App',
+  APP_NAME: brandConfig.appName ?? 'RN Architecture App',
   APP_VERSION: '1.0.0',
   DEFAULT_LANGUAGE: 'en',
   SUPPORTED_LANGUAGES: ['en', 'hi', 'te'] as const,

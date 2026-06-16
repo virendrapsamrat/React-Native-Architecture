@@ -1,7 +1,8 @@
 import { AppConstants } from '../constants/AppConstants';
+import { brandConfig } from './brandConfig';
 
 export const appConfig = {
-  name: AppConstants.APP_NAME,
+  name: brandConfig.appName ?? AppConstants.APP_NAME,
   version: AppConstants.APP_VERSION,
   defaultLanguage: AppConstants.DEFAULT_LANGUAGE,
   supportedLanguages: AppConstants.SUPPORTED_LANGUAGES,
