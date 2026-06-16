@@ -2,6 +2,40 @@
 
 A production-ready React Native (Expo + TypeScript) starter with a scalable, feature-based architecture.
 
+> This repository is designed to work as a reusable boilerplate/template for new React Native apps.
+
+## Boilerplate / Template Usage
+
+### Option 1: Use as a GitHub template
+
+1. Mark this repository as a template in GitHub settings.
+2. Use **Use this template** to create a new repository.
+3. Clone the new repository and update the app metadata.
+
+### Option 2: Clone and reuse directly
+
+```bash
+git clone https://github.com/<your-org>/rn-architecture-app.git my-new-app
+cd my-new-app
+npm install
+```
+
+Then customize the app name, bundle IDs, API URLs, and branding.
+
+## What this template includes
+
+- Expo + React Native starter setup
+- TypeScript support
+- React Navigation with bottom tabs + native stack
+- Redux Toolkit state management
+- MVVM-style ViewModels
+- Feature-based folder structure
+- Localization support for `en`, `hi`, `te`
+- Analytics + notifications service hooks
+- Secure storage and async storage utilities
+- Permission manager modules
+- Organized README docs inside `src/`
+
 ## Architecture Overview
 
 ```
@@ -65,6 +99,17 @@ EXPO_PUBLIC_ENV=development
 - **MVVM**: Screens use ViewModels for business logic, keeping UI components thin
 - **Feature slices**: Redux state is organized by feature (auth, user, profile, settings)
 - **Barrel exports**: Each component folder has an `index.ts` for clean imports
+
+## Template customization checklist
+
+- Update `app.json` metadata: `name`, `slug`, `version`, icon files
+- Update `package.json` `name` and version if needed
+- Replace `src/localization/*` strings and translations, especially `appName`
+- Replace hard-coded app labels in `src/constants/AppConstants.ts` and `src/constants/Strings.ts`
+- Update API endpoints and `.env` settings
+- Rename analytics / notification configs if needed
+- Remove sample screens or add your own feature screens
+- Check `src/navigation` for route names and flows
 
 ## Folder Documentation
 
