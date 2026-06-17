@@ -4,7 +4,6 @@ import { ProfileStats } from '../../components/organisms/ProfileStats';
 import { ProfileInfo } from '../../components/molecules/ProfileInfo';
 import { Loader } from '../../components/atoms/Loader';
 import { useProfileViewModel } from '../../viewModels/ProfileViewModel';
-import { t } from '../../localization/i18n';
 
 export const ProfileScreen = () => {
   const { profile, user, stats, isLoading } = useProfileViewModel();

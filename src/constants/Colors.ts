@@ -15,4 +15,5 @@ export const Colors = {
   success: '#22C55E',
   warning: '#F59E0B',
   transparent: 'transparent',
+  overlay: 'rgba(0,0,0,0.3)',
 } as const;

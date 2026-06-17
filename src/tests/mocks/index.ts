@@ -1,5 +1,3 @@
-import { StyleSheet } from 'react-native';
-
 export const testMocks = {
   user: {
     id: '1',

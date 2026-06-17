@@ -17,7 +17,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 }) => (
   <View style={profileHeaderStyles.container}>
     <Avatar uri={avatarUri} name={name} size="xl" />
-    <Text variant="h2" style={{ marginTop: 12 }}>
+    <Text variant="h2" style={profileHeaderStyles.name}>
       {name}
     </Text>
     {bio && (

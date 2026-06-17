@@ -3,18 +3,18 @@ import { Colors } from '../../../constants/Colors';
 
 export const avatarStyles = StyleSheet.create({
   container: {
-    overflow: 'hidden',
-    backgroundColor: Colors.surface,
     alignItems: 'center',
+    backgroundColor: Colors.surface,
     justifyContent: 'center',
+    overflow: 'hidden',
   },
-  sm: { width: 32, height: 32, borderRadius: 16 },
-  md: { width: 48, height: 48, borderRadius: 24 },
-  lg: { width: 64, height: 64, borderRadius: 32 },
-  xl: { width: 96, height: 96, borderRadius: 48 },
-  image: { width: '100%', height: '100%' },
+  image: { height: '100%', width: '100%' },
   initials: {
-    fontWeight: '600',
     color: Colors.primary,
+    fontWeight: '600',
   },
+  lg: { borderRadius: 32, height: 64, width: 64 },
+  md: { borderRadius: 24, height: 48, width: 48 },
+  sm: { borderRadius: 16, height: 32, width: 32 },
+  xl: { borderRadius: 48, height: 96, width: 96 },
 });
