@@ -5,7 +5,7 @@ type SplashConfig = {
   image?: string;
   resizeMode?: 'cover' | 'contain';
   backgroundColor?: string;
-  [k: string]: any;
+  [k: string]: unknown;
 };
 
 type BrandMeta = {

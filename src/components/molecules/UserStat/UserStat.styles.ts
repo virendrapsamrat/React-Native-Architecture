@@ -8,12 +8,12 @@ export const useUserStatStyles = () => {
       alignItems: 'center',
       padding: 12,
     },
-    value: {
-      color: theme.colors.text,
-    },
     label: {
       color: theme.colors.textSecondary,
       marginTop: 4,
+    },
+    value: {
+      color: theme.colors.text,
     },
   });
 };

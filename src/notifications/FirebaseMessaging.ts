@@ -15,7 +15,7 @@ export const FirebaseMessaging = {
     }
   },
 
-  onMessage: (callback: (message: unknown) => void) => {
+  onMessage: (_callback: (message: unknown) => void) => {
     logger.info('[FCM] Message listener registered');
     return () => logger.info('[FCM] Message listener removed');
   },

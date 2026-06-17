@@ -36,7 +36,6 @@ export const useHomeViewModel = (searchQuery = '') => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     const timer = setTimeout(() => {
       const filtered = searchQuery
         ? MOCK_PRODUCTS.filter((p) =>

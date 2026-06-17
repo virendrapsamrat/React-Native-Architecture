@@ -46,9 +46,9 @@ export const SettingsScreen = () => {
 const styles = StyleSheet.create({
   header: { marginBottom: 16 },
   row: {
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 16,
   },
 });

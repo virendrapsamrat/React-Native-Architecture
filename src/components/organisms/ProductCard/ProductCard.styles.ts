@@ -5,21 +5,21 @@ export const productCardStyles = StyleSheet.create({
   container: {
     backgroundColor: Colors.surface,
     borderRadius: 12,
-    overflow: 'hidden',
     marginBottom: 12,
-  },
-  image: {
-    width: '100%',
-    height: 160,
-    backgroundColor: Colors.border,
+    overflow: 'hidden',
   },
   content: {
     padding: 12,
   },
   footer: {
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     marginTop: 8,
+  },
+  image: {
+    backgroundColor: Colors.border,
+    height: 160,
+    width: '100%',
   },
 });

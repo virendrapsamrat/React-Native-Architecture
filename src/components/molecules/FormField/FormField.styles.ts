@@ -5,19 +5,19 @@ export const formFieldStyles = StyleSheet.create({
   container: {
     marginBottom: 16,
   },
-  label: {
-    marginBottom: 6,
+  error: {
+    color: Colors.error,
+    marginTop: 4,
   },
   input: {
-    borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: 8,
+    borderWidth: 1,
+    fontSize: 16,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    fontSize: 16,
   },
-  error: {
-    marginTop: 4,
-    color: Colors.error,
+  label: {
+    marginBottom: 6,
   },
 });

@@ -8,6 +8,7 @@ import { Text } from '../../../components/atoms/Text';
 import { MainTemplate } from '../../../components/templates/MainTemplate';
 import { useAuthViewModel } from '../../../viewModels/AuthViewModel';
 import { t } from '../../../localization/i18n';
+import { Colors } from '../../../constants/Colors';
 import type { AuthStackParamList } from '../../../types/Navigation';
 
 export const LoginScreen = () => {
@@ -62,9 +63,9 @@ export const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  title: { marginBottom: 24 },
   button: { marginTop: 8 },
-  error: { color: 'red', marginBottom: 8 },
-  footer: { flexDirection: 'row', marginTop: 16, justifyContent: 'center' },
-  link: { color: '#4F46E5' },
+  error: { color: Colors.error, marginBottom: 8 },
+  footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 16 },
+  link: { color: Colors.primary },
+  title: { marginBottom: 24 },
 });

@@ -4,48 +4,48 @@ import { Fonts } from '../../../constants/Fonts';
 
 export const buttonStyles = StyleSheet.create({
   base: {
-    borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 8,
     flexDirection: 'row',
-  },
-  primary: {
-    backgroundColor: Colors.primary,
-  },
-  secondary: {
-    backgroundColor: Colors.secondary,
-  },
-  outline: {
-    backgroundColor: Colors.transparent,
-    borderWidth: 1,
-    borderColor: Colors.primary,
-  },
-  ghost: {
-    backgroundColor: Colors.transparent,
-  },
-  sm: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  md: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-  },
-  lg: {
-    paddingVertical: 16,
-    paddingHorizontal: 32,
+    justifyContent: 'center',
   },
   disabled: {
     opacity: 0.5,
   },
-  text: {
-    fontFamily: Fonts.medium,
-    fontSize: Fonts.sizes.md,
+  ghost: {
+    backgroundColor: Colors.transparent,
+  },
+  lg: {
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+  },
+  md: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+  },
+  outline: {
+    backgroundColor: Colors.transparent,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+  },
+  outlineText: {
+    color: Colors.primary,
+  },
+  primary: {
+    backgroundColor: Colors.primary,
   },
   primaryText: {
     color: Colors.textLight,
   },
-  outlineText: {
-    color: Colors.primary,
+  secondary: {
+    backgroundColor: Colors.secondary,
+  },
+  sm: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  text: {
+    fontFamily: Fonts.medium,
+    fontSize: Fonts.sizes.md,
   },
 });
