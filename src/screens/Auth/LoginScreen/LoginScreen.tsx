@@ -14,8 +14,9 @@ import type { AuthStackParamList } from '../../../types/Navigation';
 export const LoginScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const { login, isLoading, error } = useAuthViewModel();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // Test credentials pre-filled for development
+  const [email, setEmail] = useState('test@example.com');
+  const [password, setPassword] = useState('Password123');
 
   const handleLogin = () => login(email, password);
 

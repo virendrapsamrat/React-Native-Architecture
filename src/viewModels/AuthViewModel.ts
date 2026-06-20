@@ -16,7 +16,7 @@ export const useAuthViewModel = () => {
     (email: string, password: string) => {
       const validationError = validateLogin(email, password);
       if (validationError) {
-        clearError();
+        // Validation error will be displayed in the UI
         return;
       }
       login(email, password);
