@@ -287,7 +287,7 @@ export const HomeScreen = () => {
           activeOpacity={0.8}
         >
           <Icon
-            name="🎛️"
+            name="🎚️"
             size={18}
             color={
               showFilterPanel || activeFiltersCount > 0
