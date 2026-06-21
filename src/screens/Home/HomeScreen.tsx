@@ -233,7 +233,7 @@ export const HomeScreen = () => {
   const renderEmptyState = () => {
     return (
       <View style={styles.emptyContainer}>
-        <Icon name="🔍" size={48} color={theme.colors.textSecondary} />
+        <Icon name="search" size={48} color={theme.colors.textSecondary} />
         <Text
           variant="h2"
           style={[styles.emptyTitle, { color: theme.colors.text }]}
@@ -287,7 +287,7 @@ export const HomeScreen = () => {
           activeOpacity={0.8}
         >
           <Icon
-            name="🎚️"
+            name="SlidersHorizontal"
             size={18}
             color={
               showFilterPanel || activeFiltersCount > 0
