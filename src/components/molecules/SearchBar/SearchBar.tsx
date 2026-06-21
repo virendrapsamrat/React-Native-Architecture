@@ -19,7 +19,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <View style={searchBarStyles.container}>
-      <Icon name="🔍" size={18} color={theme.colors.textSecondary} />
+      <Icon name="search" size={18} color={theme.colors.textSecondary} />
       <TextInput
         style={[searchBarStyles.input, { color: theme.colors.text }]}
         value={value}

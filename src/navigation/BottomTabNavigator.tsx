@@ -13,16 +13,16 @@ export const BottomTabNavigator = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
       headerShown: false,
-      tabBarIcon: ({ color, size }) => {
-        let iconName = '❓';
+      tabBarIcon: ({ color, size, focused }) => {
+        let iconName = 'CircleHelp';
         if (route.name === RouteNames.MAIN.HOME) {
-          iconName = '🏠';
+          iconName = focused ? 'House' : 'House';
         } else if (route.name === RouteNames.MAIN.PROFILE) {
-          iconName = '👤';
+          iconName = focused ? 'UserRound' : 'UserRound';
         } else if (route.name === RouteNames.MAIN.SETTINGS) {
-          iconName = '⚙️';
+          iconName = focused ? 'Settings' : 'Settings';
         }
-        return <Icon name={iconName} size={size} color={color} />;
+        return <Icon name={iconName} size={size} color={color} strokeWidth={focused ? 2.5 : 1.75} />;
       },
       tabBarActiveTintColor: Colors.primary,
       tabBarInactiveTintColor: Colors.textSecondary,
@@ -33,3 +33,4 @@ export const BottomTabNavigator = () => (
     <Tab.Screen name={RouteNames.MAIN.SETTINGS} component={SettingsScreen} />
   </Tab.Navigator>
 );
+
