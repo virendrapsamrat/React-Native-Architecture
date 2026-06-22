@@ -18,7 +18,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const { theme } = useTheme();
 
   return (
-    <View style={searchBarStyles.container}>
+    <View style={[searchBarStyles.container, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
       <Icon name="search" size={18} color={theme.colors.textSecondary} />
       <TextInput
         style={[searchBarStyles.input, { color: theme.colors.text }]}

@@ -18,7 +18,7 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
     <SafeAreaView
       style={[mainTemplateStyles.container, { backgroundColor: theme.colors.background }]}
     >
-      {header}
+      {header && <View style={mainTemplateStyles.headerWrapper}>{header}</View>}
       <View style={mainTemplateStyles.content}>{children}</View>
     </SafeAreaView>
   );

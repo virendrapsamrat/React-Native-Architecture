@@ -8,6 +8,7 @@ export const profileHeaderStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
     padding: 20,
+    width: '100%',
   },
   name: {
     marginTop: 12,

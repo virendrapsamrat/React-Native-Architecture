@@ -105,7 +105,7 @@ export const HomeScreen = () => {
                     style={[
                       styles.sortText,
                       isActive ? styles.sortTextActive : styles.sortTextInactive,
-                      !isActive ? { color: theme.colors.text } : null,
+                      !isActive ? { color: theme.colors.textSecondary } : null,
                     ]}
                   >
                     {opt.label}
@@ -190,7 +190,7 @@ export const HomeScreen = () => {
                 styles.categoryText,
                 selectedCategory === null
                   ? styles.categoryTextActive
-                  : [styles.categoryTextInactive, { color: theme.colors.text }],
+                  : [styles.categoryTextInactive, { color: theme.colors.textSecondary }],
               ]}
             >
               All Products
@@ -217,7 +217,7 @@ export const HomeScreen = () => {
                     styles.categoryText,
                     isSelected
                       ? styles.categoryTextActive
-                      : [styles.categoryTextInactive, { color: theme.colors.text }],
+                      : [styles.categoryTextInactive, { color: theme.colors.textSecondary }],
                   ]}
                 >
                   {formatCategoryName(category)}
@@ -262,7 +262,7 @@ export const HomeScreen = () => {
   return (
     <MainTemplate
       header={
-        <Text variant="h1" style={styles.header}>
+        <Text variant="h1" style={[styles.header, { color: theme.colors.text }]}>
           {t('home.title')}
         </Text>
       }
@@ -363,6 +363,7 @@ const styles = StyleSheet.create({
   },
   categoriesContent: {
     gap: 8,
+    paddingLeft: 4,
     paddingRight: 16,
   },
   categoryPill: {
@@ -454,6 +455,7 @@ const styles = StyleSheet.create({
   filterToggleBtnInactive: {},
   header: {
     paddingBottom: 16,
+    paddingHorizontal: 0,
   },
   list: {
     flex: 1,
@@ -492,9 +494,7 @@ const styles = StyleSheet.create({
   sortPillActive: {
     backgroundColor: Colors.primary,
   },
-  sortPillInactive: {
-    backgroundColor: Colors.transparent,
-  },
+  sortPillInactive: {},
   sortText: {
     fontSize: 12,
   },

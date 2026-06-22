@@ -8,4 +8,8 @@ export const mainTemplateStyles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  headerWrapper: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+  },
 });

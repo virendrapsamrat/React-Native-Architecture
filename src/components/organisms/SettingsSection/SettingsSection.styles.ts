@@ -8,6 +8,7 @@ export const settingsSectionStyles = StyleSheet.create({
   content: {
     backgroundColor: Colors.surface,
     borderRadius: 12,
+    borderWidth: 1,
     overflow: 'hidden',
   },
   title: {
