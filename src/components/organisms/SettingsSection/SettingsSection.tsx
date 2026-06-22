@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../atoms/Text';
+import { useTheme } from '../../../theme/ThemeProvider';
 import { settingsSectionStyles } from './SettingsSection.styles';
 
 interface SettingsSectionProps {
@@ -11,11 +12,17 @@ interface SettingsSectionProps {
 export const SettingsSection: React.FC<SettingsSectionProps> = ({
   title,
   children,
-}) => (
-  <View style={settingsSectionStyles.container}>
-    <Text variant="label" style={settingsSectionStyles.title}>
-      {title}
-    </Text>
-    <View style={settingsSectionStyles.content}>{children}</View>
-  </View>
-);
+}) => {
+  const { theme } = useTheme();
+
+  return (
+    <View style={settingsSectionStyles.container}>
+      <Text variant="label" style={[settingsSectionStyles.title, { color: theme.colors.textSecondary }]}>
+        {title}
+      </Text>
+      <View style={[settingsSectionStyles.content, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+        {children}
+      </View>
+    </View>
+  );
+};

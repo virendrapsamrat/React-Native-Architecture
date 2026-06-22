@@ -5,32 +5,41 @@ import { SettingsScreen } from '../screens/Settings';
 import { RouteNames } from './RouteNames';
 import { Icon } from '../components/atoms/Icon';
 import { Colors } from '../constants/Colors';
+import { useTheme } from '../theme/ThemeProvider';
 import type { BottomTabParamList } from '../types/Navigation';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
-export const BottomTabNavigator = () => (
-  <Tab.Navigator
-    screenOptions={({ route }) => ({
-      headerShown: false,
-      tabBarIcon: ({ color, size, focused }) => {
-        let iconName = 'CircleHelp';
-        if (route.name === RouteNames.MAIN.HOME) {
-          iconName = focused ? 'House' : 'House';
-        } else if (route.name === RouteNames.MAIN.PROFILE) {
-          iconName = focused ? 'UserRound' : 'UserRound';
-        } else if (route.name === RouteNames.MAIN.SETTINGS) {
-          iconName = focused ? 'Settings' : 'Settings';
-        }
-        return <Icon name={iconName} size={size} color={color} strokeWidth={focused ? 2.5 : 1.75} />;
-      },
-      tabBarActiveTintColor: Colors.primary,
-      tabBarInactiveTintColor: Colors.textSecondary,
-    })}
-  >
-    <Tab.Screen name={RouteNames.MAIN.HOME} component={HomeScreen} />
-    <Tab.Screen name={RouteNames.MAIN.PROFILE} component={ProfileScreen} />
-    <Tab.Screen name={RouteNames.MAIN.SETTINGS} component={SettingsScreen} />
-  </Tab.Navigator>
-);
+export const BottomTabNavigator = () => {
+  const { theme } = useTheme();
+
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ color, size, focused }) => {
+          let iconName = 'CircleHelp';
+          if (route.name === RouteNames.MAIN.HOME) {
+            iconName = focused ? 'House' : 'House';
+          } else if (route.name === RouteNames.MAIN.PROFILE) {
+            iconName = focused ? 'UserRound' : 'UserRound';
+          } else if (route.name === RouteNames.MAIN.SETTINGS) {
+            iconName = focused ? 'Settings' : 'Settings';
+          }
+          return <Icon name={iconName} size={size} color={color} strokeWidth={focused ? 2.5 : 1.75} />;
+        },
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.textSecondary,
+        tabBarStyle: {
+          backgroundColor: theme.colors.surface,
+          borderTopColor: theme.colors.border,
+        },
+      })}
+    >
+      <Tab.Screen name={RouteNames.MAIN.HOME} component={HomeScreen} />
+      <Tab.Screen name={RouteNames.MAIN.PROFILE} component={ProfileScreen} />
+      <Tab.Screen name={RouteNames.MAIN.SETTINGS} component={SettingsScreen} />
+    </Tab.Navigator>
+  );
+};
 
