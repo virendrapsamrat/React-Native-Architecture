@@ -53,6 +53,7 @@ export default ({ config }: ConfigContext): DynamicExpoConfig => {
     ...config,
     name: process.env.EXPO_PUBLIC_APP_NAME ?? selectedBrand.name,
     slug: process.env.EXPO_PUBLIC_APP_SLUG ?? selectedBrand.slug,
+    scheme: process.env.EXPO_PUBLIC_APP_SCHEME ?? 'rnarchitectureapp',
     icon: process.env.EXPO_PUBLIC_APP_ICON ?? selectedBrand.icon,
     splash: {
       image: process.env.EXPO_PUBLIC_SPLASH_IMAGE ?? selectedBrand.splashImage,
@@ -68,5 +69,8 @@ export default ({ config }: ConfigContext): DynamicExpoConfig => {
       ...config.android,
       package: process.env.EXPO_PUBLIC_ANDROID_PACKAGE ?? selectedBrand.androidPackage,
     },
+    plugins: [
+      ...(config.plugins ?? []),
+    ],
   };
 };

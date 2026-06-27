@@ -3,8 +3,8 @@ import { HomeScreen } from '../screens/Home';
 import { ProfileScreen } from '../screens/Profile';
 import { SettingsScreen } from '../screens/Settings';
 import { RouteNames } from './RouteNames';
+import { TestIds } from '../constants/TestIds';
 import { Icon } from '../components/atoms/Icon';
-import { Colors } from '../constants/Colors';
 import { useTheme } from '../theme/ThemeProvider';
 import type { BottomTabParamList } from '../types/Navigation';
 
@@ -36,9 +36,21 @@ export const BottomTabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name={RouteNames.MAIN.HOME} component={HomeScreen} />
-      <Tab.Screen name={RouteNames.MAIN.PROFILE} component={ProfileScreen} />
-      <Tab.Screen name={RouteNames.MAIN.SETTINGS} component={SettingsScreen} />
+      <Tab.Screen
+        name={RouteNames.MAIN.HOME}
+        component={HomeScreen}
+        options={{ tabBarButtonTestID: TestIds.MAIN.HOME_TAB }}
+      />
+      <Tab.Screen
+        name={RouteNames.MAIN.PROFILE}
+        component={ProfileScreen}
+        options={{ tabBarButtonTestID: TestIds.MAIN.PROFILE_TAB }}
+      />
+      <Tab.Screen
+        name={RouteNames.MAIN.SETTINGS}
+        component={SettingsScreen}
+        options={{ tabBarButtonTestID: TestIds.MAIN.SETTINGS_TAB }}
+      />
     </Tab.Navigator>
   );
 };

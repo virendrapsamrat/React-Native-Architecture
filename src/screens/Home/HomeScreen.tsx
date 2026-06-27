@@ -15,6 +15,7 @@ import { SearchBar } from '../../components/molecules/SearchBar';
 import { ProductCard } from '../../components/organisms/ProductCard';
 import { MainTemplate } from '../../components/templates/MainTemplate';
 import { Colors } from '../../constants/Colors';
+import { TestIds } from '../../constants/TestIds';
 import { useDebounce } from '../../hooks/useDebounce';
 import { t } from '../../localization/i18n';
 import { useTheme } from '../../theme/ThemeProvider';
@@ -262,14 +263,20 @@ export const HomeScreen = () => {
   return (
     <MainTemplate
       header={
-        <Text variant="h1" style={[styles.header, { color: theme.colors.text }]}>
+        <Text
+          testID={TestIds.MAIN.HOME_TITLE}
+          variant="h1"
+          style={[styles.header, { color: theme.colors.text }]}
+        >
           {t('home.title')}
         </Text>
       }
     >
+      <View testID={TestIds.MAIN.HOME_SCREEN}>
       <View style={styles.searchRow}>
         <View style={styles.searchBarWrapper}>
           <SearchBar
+            testID={TestIds.MAIN.SEARCH_INPUT}
             value={search}
             onChangeText={setSearch}
             placeholder={t('home.searchPlaceholder')}
@@ -337,6 +344,7 @@ export const HomeScreen = () => {
           contentContainerStyle={styles.listContent}
         />
       )}
+      </View>
     </MainTemplate>
   );
 };

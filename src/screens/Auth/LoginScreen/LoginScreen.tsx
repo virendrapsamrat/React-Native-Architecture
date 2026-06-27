@@ -9,6 +9,7 @@ import { MainTemplate } from '../../../components/templates/MainTemplate';
 import { useAuthViewModel } from '../../../viewModels/AuthViewModel';
 import { t } from '../../../localization/i18n';
 import { Colors } from '../../../constants/Colors';
+import { TestIds } from '../../../constants/TestIds';
 import type { AuthStackParamList } from '../../../types/Navigation';
 
 export const LoginScreen = () => {
@@ -22,42 +23,48 @@ export const LoginScreen = () => {
 
   return (
     <MainTemplate>
-      <Text variant="h1" style={styles.title}>
-        {t('auth.login')}
-      </Text>
-      <FormField
-        label={t('auth.email')}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <FormField
-        label={t('auth.password')}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      {error && (
-        <Text variant="caption" style={styles.error}>
-          {error}
+      <View testID={TestIds.AUTH.LOGIN_SCREEN}>
+        <Text variant="h1" style={styles.title}>
+          {t('auth.login')}
         </Text>
-      )}
-      <Button
-        title={t('auth.login')}
-        onPress={handleLogin}
-        loading={isLoading}
-        style={styles.button}
-      />
-      <View style={styles.footer}>
-        <Text variant="body">{t('auth.noAccount')} </Text>
-        <Text
-          variant="body"
-          style={styles.link}
-          onPress={() => navigation.navigate('Signup')}
-        >
-          {t('auth.signup')}
-        </Text>
+        <FormField
+          testID={TestIds.AUTH.EMAIL_INPUT}
+          label={t('auth.email')}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <FormField
+          testID={TestIds.AUTH.PASSWORD_INPUT}
+          label={t('auth.password')}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        {error && (
+          <Text variant="caption" style={styles.error}>
+            {error}
+          </Text>
+        )}
+        <Button
+          testID={TestIds.AUTH.SUBMIT_BUTTON}
+          title={t('auth.login')}
+          onPress={handleLogin}
+          loading={isLoading}
+          style={styles.button}
+        />
+        <View style={styles.footer}>
+          <Text variant="body">{t('auth.noAccount')} </Text>
+          <Text
+            testID={TestIds.AUTH.SIGNUP_LINK}
+            variant="body"
+            style={styles.link}
+            onPress={() => navigation.navigate('Signup')}
+          >
+            {t('auth.signup')}
+          </Text>
+        </View>
       </View>
     </MainTemplate>
   );

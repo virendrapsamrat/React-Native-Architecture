@@ -9,6 +9,7 @@ import { toggleNotifications, toggleDarkMode } from '../../store/redux/settings/
 import { t } from '../../localization/i18n';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Colors } from '../../constants/Colors';
+import { TestIds } from '../../constants/TestIds';
 
 export const SettingsScreen = () => {
   const { logout } = useAuth();
@@ -24,7 +25,8 @@ export const SettingsScreen = () => {
         </Text>
       }
     >
-      <SettingsSection title="Preferences">
+      <View testID={TestIds.SETTINGS.SCREEN}>
+        <SettingsSection title="Preferences">
         <View style={styles.row}>
           <Text variant="body">{t('settings.notifications')}</Text>
           <Switch
@@ -52,7 +54,13 @@ export const SettingsScreen = () => {
         </View>
       </SettingsSection>
 
-      <Button title={t('settings.logout')} onPress={logout} variant="outline" />
+      <Button
+        testID={TestIds.SETTINGS.LOGOUT_BUTTON}
+        title={t('settings.logout')}
+        onPress={logout}
+        variant="outline"
+      />
+      </View>
     </MainTemplate>
   );
 };
