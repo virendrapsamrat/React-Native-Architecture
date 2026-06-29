@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "types": ["jest", "detox", "node"],
-    "noEmit": true
-  },
-  "include": ["./**/*.ts"]
-}

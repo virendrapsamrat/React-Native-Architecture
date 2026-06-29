@@ -21,7 +21,7 @@ const compat = new FlatCompat({
 
 module.exports = [
   {
-    ignores: ['node_modules/**', 'build/**', 'dist/**', 'eslint.config.js', '.husky/**', 'e2e/**', '.detoxrc.js'],
+    ignores: ['node_modules/**', 'build/**', 'dist/**', 'eslint.config.js', 'commitlint.config.js', '.husky/**'],
   },
   ...compat.extends(
     'eslint:recommended',

@@ -12,7 +12,6 @@ Static, app-wide constant values.
 | `AppConstants.ts` | App name, version, pagination limits |
 | `Regex.ts` | Validation regex patterns |
 | `StorageKeys.ts` | AsyncStorage / SecureStore key names |
-| `TestIds.ts` | Detox E2E `testID` values (aligned with route names) |
 
 ## Usage
 
