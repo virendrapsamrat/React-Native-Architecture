@@ -9,7 +9,6 @@ import { MainTemplate } from '../../../components/templates/MainTemplate';
 import { useAuthViewModel } from '../../../viewModels/AuthViewModel';
 import { t } from '../../../localization/i18n';
 import { Colors } from '../../../constants/Colors';
-import { TestIds } from '../../../constants/TestIds';
 import type { AuthStackParamList } from '../../../types/Navigation';
 
 export const LoginScreen = () => {
@@ -23,12 +22,11 @@ export const LoginScreen = () => {
 
   return (
     <MainTemplate>
-      <View testID={TestIds.AUTH.LOGIN_SCREEN}>
+      <View>
         <Text variant="h1" style={styles.title}>
           {t('auth.login')}
         </Text>
         <FormField
-          testID={TestIds.AUTH.EMAIL_INPUT}
           label={t('auth.email')}
           value={email}
           onChangeText={setEmail}
@@ -36,7 +34,6 @@ export const LoginScreen = () => {
           autoCapitalize="none"
         />
         <FormField
-          testID={TestIds.AUTH.PASSWORD_INPUT}
           label={t('auth.password')}
           value={password}
           onChangeText={setPassword}
@@ -48,7 +45,6 @@ export const LoginScreen = () => {
           </Text>
         )}
         <Button
-          testID={TestIds.AUTH.SUBMIT_BUTTON}
           title={t('auth.login')}
           onPress={handleLogin}
           loading={isLoading}
@@ -57,7 +53,6 @@ export const LoginScreen = () => {
         <View style={styles.footer}>
           <Text variant="body">{t('auth.noAccount')} </Text>
           <Text
-            testID={TestIds.AUTH.SIGNUP_LINK}
             variant="body"
             style={styles.link}
             onPress={() => navigation.navigate('Signup')}
