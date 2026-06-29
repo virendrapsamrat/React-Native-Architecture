@@ -145,6 +145,9 @@ Each module has its own `README.md` with detailed usage guidelines. See the `src
 | `npm run ios` | Run on iOS |
 | `npm run android` | Run on Android |
 | `npm run web` | Run on web |
+| `npm run e2e:prebuild` | Generate native projects for Detox |
+| `npm run e2e:ios` | Build and run Detox tests on iOS simulator |
+| `npm run e2e:android` | Build and run Detox tests on Android emulator |
 
 ## License
 
