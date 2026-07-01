@@ -16,7 +16,7 @@ export const useHNStoriesQuery = ({
     queryFn: ({ pageParam = 0 }) =>
       HNService.fetchStories(query, tag, pageParam as number),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: HNSearchResponse) => {
       const nextPage = lastPage.page + 1;
       return nextPage < lastPage.nbPages ? nextPage : undefined;
     },

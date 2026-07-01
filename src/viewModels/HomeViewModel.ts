@@ -22,7 +22,7 @@ export const useHomeViewModel = (searchQuery = '') => {
   // Flatten paginated pages into a single sorted list
   const stories = useMemo<HNHit[]>(() => {
     if (!data) return [];
-    const flat = data.pages.flatMap((page) => page.hits);
+    const flat = data.pages.flatMap((page: import('../types/HNStory').HNSearchResponse) => page.hits);
 
     if (sortBy === 'points') {
       return [...flat].sort((a, b) => (b.points ?? 0) - (a.points ?? 0));
