@@ -1,520 +1,633 @@
-import { useState } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
+  Animated,
   FlatList,
+  Linking,
+  Pressable,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
-  Switch,
+  TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
-import { Button } from '../../components/atoms/Button';
-import { Icon } from '../../components/atoms/Icon';
-import { Loader } from '../../components/atoms/Loader';
 import { Text } from '../../components/atoms/Text';
-import { SearchBar } from '../../components/molecules/SearchBar';
-import { ProductCard } from '../../components/organisms/ProductCard';
-import { MainTemplate } from '../../components/templates/MainTemplate';
 import { Colors } from '../../constants/Colors';
 import { useDebounce } from '../../hooks/useDebounce';
-import { t } from '../../localization/i18n';
-import { useTheme } from '../../theme/ThemeProvider';
-import { useHomeViewModel } from '../../viewModels/HomeViewModel';
+import { useTheme, type Theme } from '../../theme/ThemeProvider';
+import { useHomeViewModel, type SortOption } from '../../viewModels/HomeViewModel';
+import type { HNHit, HNStoryTag } from '../../types/HNStory';
 
-const formatCategoryName = (name: string) => {
-  return name
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+// ─── helpers ─────────────────────────────────────────────────────────────────
+
+const timeAgo = (iso: string): string => {
+  const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
 };
 
-export const HomeScreen = () => {
+const getDomain = (url: string | null): string | null => {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+};
+
+// Colours stored as constants, not inline literals
+const TAG_COLORS = {
+  ask: '#8B5CF6',
+  show: '#10B981',
+  job: '#F59E0B',
+} as const;
+
+// ─── animated story card ──────────────────────────────────────────────────────
+
+interface StoryCardProps {
+  item: HNHit;
+  index: number;
+}
+
+const StoryCard: React.FC<StoryCardProps> = ({ item, index }) => {
   const { theme } = useTheme();
-  const [search, setSearch] = useState('');
-  const [showFilterPanel, setShowFilterPanel] = useState(false);
-  const debouncedSearch = useDebounce(search);
 
-  const {
-    products,
-    categories,
-    selectedCategory,
-    setSelectedCategory,
-    inStockOnly,
-    setInStockOnly,
-    sortBy,
-    setSortBy,
-    isLoading,
-    isRefreshing,
-    error,
-    clearFilters,
-    refreshProducts,
-  } = useHomeViewModel(debouncedSearch);
+  // useMemo creates a stable Animated.Value without needing .current in JSX
+  const fadeAnim = useMemo(() => new Animated.Value(0), []);
+  const slideAnim = useMemo(() => new Animated.Value(20), []);
+  const scaleAnim = useMemo(() => new Animated.Value(1), []);
 
-  const activeFiltersCount =
-    (selectedCategory ? 1 : 0) + (inStockOnly ? 1 : 0) + (sortBy !== 'none' ? 1 : 0);
+  useEffect(() => {
+    const delay = Math.min(index * 50, 300);
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        delay,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        delay,
+        tension: 70,
+        friction: 9,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [fadeAnim, slideAnim, index]);
 
-  const renderFilterPanel = () => {
-    if (!showFilterPanel) return null;
+  const handlePressIn = useCallback(() => {
+    Animated.spring(scaleAnim, { toValue: 0.97, useNativeDriver: true, tension: 120, friction: 8 }).start();
+  }, [scaleAnim]);
 
-    return (
-      <View
-        style={[
-          styles.filterPanel,
-          {
-            backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.border,
-          },
-        ]}
-      >
-        <View style={styles.filterSection}>
-          <Text
-            variant="body"
-            style={[
-              styles.filterSectionTitle,
-              { color: theme.colors.textSecondary },
-            ]}
-          >
-            Sort By
-          </Text>
-          <View style={styles.sortOptionsRow}>
-            {(
-              [
-                { label: 'Default', value: 'none' },
-                { label: 'Price: Low-High', value: 'priceAsc' },
-                { label: 'Price: High-Low', value: 'priceDesc' },
-                { label: 'Top Rated', value: 'ratingDesc' },
-              ] as const
-            ).map((opt) => {
-              const isActive = sortBy === opt.value;
-              return (
-                <TouchableOpacity
-                  key={opt.value}
-                  onPress={() => setSortBy(opt.value)}
-                  style={[
-                    styles.sortPill,
-                    isActive ? styles.sortPillActive : styles.sortPillInactive,
-                    {
-                      borderColor: isActive
-                        ? theme.colors.primary
-                        : theme.colors.border,
-                    },
-                  ]}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    variant="caption"
-                    style={[
-                      styles.sortText,
-                      isActive ? styles.sortTextActive : styles.sortTextInactive,
-                      !isActive ? { color: theme.colors.textSecondary } : null,
-                    ]}
-                  >
-                    {opt.label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
+  const handlePressOut = useCallback(() => {
+    Animated.spring(scaleAnim, { toValue: 1, useNativeDriver: true, tension: 120, friction: 8 }).start();
+  }, [scaleAnim]);
 
-        <View style={[styles.filterDivider, { backgroundColor: theme.colors.border }]} />
+  const handlePress = useCallback(() => {
+    if (item.url) Linking.openURL(item.url).catch(() => null);
+  }, [item.url]);
 
-        <View style={styles.stockFilterRow}>
-          <View>
-            <Text
-              variant="body"
-              style={[styles.stockText, { color: theme.colors.text }]}
-            >
-              In Stock Only
-            </Text>
-            <Text
-              variant="caption"
-              style={[styles.stockSubtext, { color: theme.colors.textSecondary }]}
-            >
-              Hide products out of stock
-            </Text>
-          </View>
-          <Switch
-            value={inStockOnly}
-            onValueChange={setInStockOnly}
-            trackColor={{
-              false: theme.colors.border,
-              true: theme.colors.primary,
-            }}
-            thumbColor={Colors.textLight}
-          />
-        </View>
+  const domain = getDomain(item.url);
+  const isAsk = item._tags?.includes('ask_hn');
+  const isShow = item._tags?.includes('show_hn');
+  const isJob = item._tags?.includes('job');
 
-        {activeFiltersCount > 0 && (
-          <View style={styles.panelActionsRow}>
-            <TouchableOpacity
-              onPress={() => {
-                clearFilters();
-                setSearch('');
-              }}
-              style={styles.clearAllTextBtn}
-            >
-              <Text
-                variant="body"
-                style={styles.clearText}
-              >
-                Reset All Filters
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
-    );
-  };
-
-  const renderCategoryList = () => {
-    return (
-      <View style={styles.categoriesContainer}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesContent}
-        >
-          <TouchableOpacity
-            onPress={() => setSelectedCategory(null)}
-            style={[
-              styles.categoryPill,
-              selectedCategory === null
-                ? [styles.categoryPillActive, { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary }]
-                : [styles.categoryPillInactive, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }],
-            ]}
-            activeOpacity={0.7}
-          >
-            <Text
-              variant="body"
-              style={[
-                styles.categoryText,
-                selectedCategory === null
-                  ? styles.categoryTextActive
-                  : [styles.categoryTextInactive, { color: theme.colors.textSecondary }],
-              ]}
-            >
-              All Products
-            </Text>
-          </TouchableOpacity>
-
-          {categories.map((category) => {
-            const isSelected = selectedCategory === category;
-            return (
-              <TouchableOpacity
-                key={category}
-                onPress={() => setSelectedCategory(category)}
-                style={[
-                  styles.categoryPill,
-                  isSelected
-                    ? [styles.categoryPillActive, { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary }]
-                    : [styles.categoryPillInactive, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }],
-                ]}
-                activeOpacity={0.7}
-              >
-                <Text
-                  variant="body"
-                  style={[
-                    styles.categoryText,
-                    isSelected
-                      ? styles.categoryTextActive
-                      : [styles.categoryTextInactive, { color: theme.colors.textSecondary }],
-                  ]}
-                >
-                  {formatCategoryName(category)}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-      </View>
-    );
-  };
-
-  const renderEmptyState = () => {
-    return (
-      <View style={styles.emptyContainer}>
-        <Icon name="search" size={48} color={theme.colors.textSecondary} />
-        <Text
-          variant="h2"
-          style={[styles.emptyTitle, { color: theme.colors.text }]}
-        >
-          No Products Found
-        </Text>
-        <Text
-          variant="body"
-          style={[styles.emptySub, { color: theme.colors.textSecondary }]}
-        >
-          {"We couldn't find any products matching your search terms or filters. Try adjusting them or resetting."}
-        </Text>
-        <Button
-          title="Reset Filters"
-          onPress={() => {
-            clearFilters();
-            setSearch('');
-          }}
-          variant="outline"
-          style={styles.resetButton}
-        />
-      </View>
-    );
-  };
+  let tagLabel: string | null = null;
+  let tagBg: string = Colors.primary;
+  if (isAsk) { tagLabel = 'Ask'; tagBg = TAG_COLORS.ask; }
+  else if (isShow) { tagLabel = 'Show'; tagBg = TAG_COLORS.show; }
+  else if (isJob) { tagLabel = 'Job'; tagBg = TAG_COLORS.job; }
 
   return (
-    <MainTemplate
-      header={
-        <Text
-          variant="h1"
-          style={[styles.header, { color: theme.colors.text }]}
-        >
-          {t('home.title')}
-        </Text>
-      }
+    <Animated.View
+      style={[
+        styles.cardWrapper,
+        { opacity: fadeAnim, transform: [{ translateY: slideAnim }, { scale: scaleAnim }] },
+      ]}
     >
-      <View>
-      <View style={styles.searchRow}>
-        <View style={styles.searchBarWrapper}>
-          <SearchBar
-            value={search}
-            onChangeText={setSearch}
-            placeholder={t('home.searchPlaceholder')}
-          />
-        </View>
-        <TouchableOpacity
-          onPress={() => setShowFilterPanel(!showFilterPanel)}
-          style={[
-            styles.filterToggleBtn,
-            showFilterPanel || activeFiltersCount > 0
-              ? [styles.filterToggleBtnActive, { backgroundColor: theme.colors.primary }]
-              : [styles.filterToggleBtnInactive, { backgroundColor: theme.colors.surface }],
-            { borderColor: theme.colors.border },
-          ]}
-          activeOpacity={0.8}
-        >
-          <Icon
-            name="SlidersHorizontal"
-            size={18}
-            color={
-              showFilterPanel || activeFiltersCount > 0
-                ? Colors.textLight
-                : theme.colors.textSecondary
-            }
-          />
-          {activeFiltersCount > 0 && !showFilterPanel && (
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{activeFiltersCount}</Text>
+      <Pressable
+        onPress={handlePress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}
+      >
+        {/* Badge + domain row */}
+        <View style={styles.cardHeader}>
+          {tagLabel !== null && (
+            <View style={[styles.tagBadge, { backgroundColor: tagBg }]}>
+              <Text style={styles.tagBadgeText}>{tagLabel}</Text>
             </View>
           )}
-        </TouchableOpacity>
-      </View>
-
-      {renderFilterPanel()}
-
-      {renderCategoryList()}
-
-      {error ? (
-        <View style={styles.errorContainer}>
-          <Text
-            variant="body"
-            style={[styles.errorText, { color: theme.colors.error }]}
-          >
-            {error}
-          </Text>
-          <Button
-            title="Retry"
-            onPress={() => refreshProducts()}
-            variant="outline"
-          />
+          {domain !== null && (
+            <Text style={[styles.domainText, { color: theme.colors.textSecondary }]} numberOfLines={1}>
+              {domain}
+            </Text>
+          )}
         </View>
-      ) : isLoading ? (
-        <Loader />
-      ) : products.length === 0 ? (
-        renderEmptyState()
-      ) : (
-        <FlatList
-          data={products}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ProductCard product={item} />}
-          style={styles.list}
-          showsVerticalScrollIndicator={false}
-          refreshing={isRefreshing}
-          onRefresh={refreshProducts}
-          contentContainerStyle={styles.listContent}
-        />
-      )}
-      </View>
-    </MainTemplate>
+
+        {/* Title */}
+        <Text style={[styles.cardTitle, { color: theme.colors.text }]} numberOfLines={3}>
+          {item.title}
+        </Text>
+
+        {/* Footer */}
+        <View style={styles.cardFooter}>
+          <View style={styles.cardMeta}>
+            <View style={[styles.pointsBadge, { backgroundColor: theme.colors.background }]}>
+              <Text style={[styles.pointsText, { color: Colors.primary }]}>▲ {item.points ?? 0}</Text>
+            </View>
+            <Text style={[styles.metaText, { color: theme.colors.textSecondary }]}>
+              💬 {item.num_comments ?? 0}
+            </Text>
+          </View>
+          <View style={styles.authorRow}>
+            <Text style={[styles.metaText, { color: theme.colors.textSecondary }]}>{item.author}</Text>
+            <Text style={[styles.dot, { color: theme.colors.border }]}> · </Text>
+            <Text style={[styles.metaText, { color: theme.colors.textSecondary }]}>{timeAgo(item.created_at)}</Text>
+          </View>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 };
 
+// ─── filter / sort config ─────────────────────────────────────────────────────
+
+interface TagConfig { label: string; value: HNStoryTag; emoji: string }
+
+const TAG_OPTIONS: TagConfig[] = [
+  { label: 'Top Stories', value: 'story',   emoji: '🔥' },
+  { label: 'Ask HN',      value: 'ask_hn',  emoji: '❓' },
+  { label: 'Show HN',     value: 'show_hn', emoji: '🚀' },
+  { label: 'Jobs',        value: 'job',     emoji: '💼' },
+];
+
+const SORT_OPTIONS: { label: string; value: SortOption }[] = [
+  { label: 'Newest',        value: 'newest'   },
+  { label: 'Top Points',    value: 'points'   },
+  { label: 'Most Comments', value: 'comments' },
+];
+
+interface HomeListHeaderProps {
+  theme: Theme;
+  searchText: string;
+  selectedTag: HNStoryTag;
+  sortBy: SortOption;
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedTag: (tag: HNStoryTag) => void;
+  setSortBy: (sort: SortOption) => void;
+}
+
+const HomeListHeader: React.FC<HomeListHeaderProps> = ({
+  theme,
+  searchText,
+  selectedTag,
+  sortBy,
+  setSearchText,
+  setSelectedTag,
+  setSortBy,
+}) => (
+  <View style={styles.listHeader}>
+    {/* Title row */}
+    <View style={styles.titleRow}>
+      <View>
+        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>Hacker News</Text>
+        <Text style={[styles.headerSub, { color: theme.colors.textSecondary }]}>Top tech stories, updated live</Text>
+      </View>
+      <View style={[styles.hnBadge, { backgroundColor: Colors.warning }]}>
+        <Text style={styles.hnBadgeText}>HN</Text>
+      </View>
+    </View>
+
+    {/* Search bar */}
+    <View style={[styles.searchBox, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+      <Text style={styles.searchIcon}>🔍</Text>
+      <TextInput
+        style={[styles.searchInput, { color: theme.colors.text }]}
+        placeholder="Search stories…"
+        placeholderTextColor={theme.colors.textSecondary}
+        value={searchText}
+        onChangeText={setSearchText}
+        returnKeyType="search"
+        clearButtonMode="while-editing"
+      />
+    </View>
+
+    {/* Tag filter pills */}
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tagRow}>
+      {TAG_OPTIONS.map((t) => {
+        const active = selectedTag === t.value;
+        return (
+          <TouchableOpacity
+            key={t.value}
+            onPress={() => setSelectedTag(t.value)}
+            activeOpacity={0.75}
+            style={[
+              styles.tagPill,
+              active
+                ? { backgroundColor: Colors.primary, borderColor: Colors.primary }
+                : { backgroundColor: theme.colors.surface, borderColor: theme.colors.border },
+            ]}
+          >
+            <Text style={styles.tagEmoji}>{t.emoji}</Text>
+            <Text style={[styles.tagPillText, { color: active ? Colors.textLight : theme.colors.textSecondary }]}>
+              {t.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </ScrollView>
+
+    {/* Sort chips */}
+    <View style={styles.sortRow}>
+      <Text style={[styles.sortLabel, { color: theme.colors.textSecondary }]}>Sort:</Text>
+      {SORT_OPTIONS.map((s) => {
+        const active = sortBy === s.value;
+        return (
+          <TouchableOpacity
+            key={s.value}
+            onPress={() => setSortBy(s.value)}
+            activeOpacity={0.75}
+            style={[
+              styles.sortChip,
+              active
+                ? { backgroundColor: `${Colors.primary}20`, borderColor: Colors.primary }
+                : { borderColor: theme.colors.border },
+            ]}
+          >
+            <Text style={[styles.sortChipText, { color: active ? Colors.primary : theme.colors.textSecondary }]}>
+              {s.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+
+    {/* Divider */}
+    <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
+  </View>
+);
+
+// ─── main screen ──────────────────────────────────────────────────────────────
+
+export const HomeScreen: React.FC = () => {
+  const { theme } = useTheme();
+  const [searchText, setSearchText] = useState('');
+  const debouncedSearch = useDebounce(searchText, 400);
+
+  const {
+    stories,
+    isLoading,
+    isRefreshing,
+    isFetchingNextPage,
+    hasNextPage,
+    error,
+    selectedTag,
+    setSelectedTag,
+    sortBy,
+    setSortBy,
+    refresh,
+    loadMore,
+  } = useHomeViewModel(debouncedSearch);
+
+  // ── render helpers ──────────────────────────────────────────────────────────
+
+  const renderItem = useCallback(
+    ({ item, index }: { item: HNHit; index: number }) => (
+      <StoryCard item={item} index={index} />
+    ),
+    [],
+  );
+
+  const keyExtractor = useCallback((item: HNHit) => item.objectID, []);
+
+  const renderFooter = useCallback(() => {
+    if (!isFetchingNextPage) return null;
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color={Colors.primary} />
+        <Text style={[styles.footerText, { color: theme.colors.textSecondary }]}>Loading more…</Text>
+      </View>
+    );
+  }, [isFetchingNextPage, theme]);
+
+  const renderEmpty = useCallback(() => {
+    if (isLoading) return null;
+    const isError = Boolean(error);
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyEmoji}>{isError ? '⚠️' : '🔍'}</Text>
+        <Text style={[styles.emptyTitle, { color: theme.colors.text }]}>
+          {isError ? 'Something went wrong' : 'No stories found'}
+        </Text>
+        <Text style={[styles.emptySub, { color: theme.colors.textSecondary }]}>
+          {isError ? (error ?? '') : 'Try a different search term or filter.'}
+        </Text>
+        <TouchableOpacity
+          style={[styles.retryBtn, { backgroundColor: Colors.primary }]}
+          onPress={refresh}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.retryBtnText}>{isError ? 'Try Again' : 'Refresh'}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }, [isLoading, error, theme, refresh]);
+
+  // ── skeleton placeholders while loading ─────────────────────────────────────
+
+  const skeletonData = useMemo(
+    () => (isLoading ? ['s0', 's1', 's2', 's3', 's4', 's5'] : []),
+    [isLoading],
+  );
+
+  const renderSkeleton = useCallback(
+    ({ item }: { item: string }) => (
+      <View key={item} style={[styles.skeleton, { backgroundColor: theme.colors.border }]} />
+    ),
+    [theme],
+  );
+
+  // ── render ──────────────────────────────────────────────────────────────────
+
+  return (
+    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      {isLoading ? (
+        /* Skeleton list while loading first page */
+        <FlatList
+          data={skeletonData}
+          keyExtractor={(item) => item}
+          renderItem={renderSkeleton}
+          ListHeaderComponent={
+            <HomeListHeader
+              theme={theme}
+              searchText={searchText}
+              selectedTag={selectedTag}
+              sortBy={sortBy}
+              setSearchText={setSearchText}
+              setSelectedTag={setSelectedTag}
+              setSortBy={setSortBy}
+            />
+          }
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <FlatList
+          data={stories}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          ListHeaderComponent={
+            <HomeListHeader
+              theme={theme}
+              searchText={searchText}
+              selectedTag={selectedTag}
+              sortBy={sortBy}
+              setSearchText={setSearchText}
+              setSelectedTag={setSelectedTag}
+              setSortBy={setSortBy}
+            />
+          }
+          ListEmptyComponent={renderEmpty}
+          ListFooterComponent={renderFooter}
+          onEndReached={hasNextPage ? loadMore : undefined}
+          onEndReachedThreshold={0.4}
+          refreshing={isRefreshing}
+          onRefresh={refresh}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          removeClippedSubviews
+        />
+      )}
+    </SafeAreaView>
+  );
+};
+
+// ─── stylesheet ───────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
-  badge: {
+  authorRow: {
     alignItems: 'center',
-    backgroundColor: Colors.error,
-    borderRadius: 9,
-    height: 18,
-    justifyContent: 'center',
-    position: 'absolute',
-    right: -4,
-    top: -4,
-    width: 18,
+    flexDirection: 'row',
   },
-  badgeText: {
-    color: Colors.textLight,
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  categoriesContainer: {
-    marginVertical: 8,
-  },
-  categoriesContent: {
-    gap: 8,
-    paddingLeft: 4,
-    paddingRight: 16,
-  },
-  categoryPill: {
-    borderRadius: 20,
+  card: {
+    borderRadius: 14,
     borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    elevation: 2,
+    padding: 16,
+    shadowColor: Colors.text,
+    shadowOffset: { height: 2, width: 0 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
   },
-  categoryPillActive: {},
-  categoryPillInactive: {},
-  categoryText: {
-    fontSize: 14,
+  cardFooter: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 12,
   },
-  categoryTextActive: {
-    color: Colors.textLight,
+  cardHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 6,
+  },
+  cardMeta: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  cardTitle: {
+    fontSize: 15,
     fontWeight: '600',
+    lineHeight: 22,
   },
-  categoryTextInactive: {},
-  clearAllTextBtn: {
-    paddingVertical: 4,
+  cardWrapper: {
+    marginBottom: 10,
+    marginHorizontal: 16,
   },
-  clearText: {
-    color: Colors.error,
-    fontWeight: '600',
+  divider: {
+    height: 1,
+    marginBottom: 12,
+    marginTop: 4,
+  },
+  domainText: {
+    flex: 1,
+    fontSize: 11,
+    marginLeft: 6,
+  },
+  dot: {
+    fontSize: 12,
   },
   emptyContainer: {
     alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 60,
+    paddingHorizontal: 32,
+    paddingTop: 60,
+  },
+  emptyEmoji: {
+    fontSize: 48,
+    marginBottom: 12,
   },
   emptySub: {
-    lineHeight: 20,
+    fontSize: 14,
     marginBottom: 24,
     textAlign: 'center',
   },
   emptyTitle: {
+    fontSize: 20,
+    fontWeight: '700',
     marginBottom: 8,
-    marginTop: 16,
     textAlign: 'center',
   },
-  errorContainer: {
+  footerLoader: {
     alignItems: 'center',
-    flex: 1,
+    flexDirection: 'row',
+    gap: 8,
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingVertical: 20,
   },
-  errorText: {
-    marginBottom: 12,
-    textAlign: 'center',
+  footerText: {
+    fontSize: 13,
   },
-  filterDivider: {
-    height: 1,
-    marginVertical: 10,
-  },
-  filterPanel: {
-    borderRadius: 8,
-    borderWidth: 1,
-    elevation: 2,
-    marginBottom: 12,
-    padding: 12,
-    shadowColor: Colors.text,
-    shadowOffset: { height: 1, width: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  filterSection: {
-    marginBottom: 8,
-  },
-  filterSectionTitle: {
+  headerSub: {
     fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    marginBottom: 8,
-    textTransform: 'uppercase',
+    marginTop: 2,
   },
-  filterToggleBtn: {
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
+  hnBadge: {
     alignItems: 'center',
-    borderRadius: 8,
-    borderWidth: 1,
+    borderRadius: 10,
     height: 44,
     justifyContent: 'center',
-    position: 'relative',
     width: 44,
   },
-  filterToggleBtnActive: {},
-  filterToggleBtnInactive: {},
-  header: {
-    paddingBottom: 16,
-    paddingHorizontal: 0,
-  },
-  list: {
-    flex: 1,
-    marginTop: 12,
+  hnBadgeText: {
+    color: Colors.textLight,
+    fontSize: 14,
+    fontWeight: '800',
   },
   listContent: {
-    paddingBottom: 24,
+    paddingBottom: 40,
   },
-  panelActionsRow: {
-    alignItems: 'flex-end',
-    marginTop: 12,
+  listHeader: {
+    paddingBottom: 4,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  resetButton: {
-    minWidth: 150,
-  },
-  searchBarWrapper: {
-    flex: 1,
-    marginRight: 8,
-  },
-  searchRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  sortOptionsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  sortPill: {
-    borderRadius: 16,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  sortPillActive: {
-    backgroundColor: Colors.primary,
-  },
-  sortPillInactive: {},
-  sortText: {
+  metaText: {
     fontSize: 12,
   },
-  sortTextActive: {
+  pointsBadge: {
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  pointsText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  retryBtn: {
+    borderRadius: 10,
+    paddingHorizontal: 28,
+    paddingVertical: 12,
+  },
+  retryBtnText: {
     color: Colors.textLight,
+    fontWeight: '700',
+  },
+  root: {
+    flex: 1,
+  },
+  searchBox: {
+    alignItems: 'center',
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    marginBottom: 12,
+    marginTop: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 2,
+  },
+  searchIcon: {
+    fontSize: 14,
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 15,
+    paddingVertical: 10,
+  },
+  skeleton: {
+    borderRadius: 14,
+    height: 110,
+    marginBottom: 10,
+    marginHorizontal: 16,
+  },
+  sortChip: {
+    borderRadius: 20,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  sortChipText: {
+    fontSize: 12,
     fontWeight: '600',
   },
-  sortTextInactive: {},
-  stockFilterRow: {
+  sortLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginRight: 4,
+  },
+  sortRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
+    marginBottom: 10,
+    marginTop: 8,
+  },
+  tagBadge: {
+    borderRadius: 5,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+  },
+  tagBadgeText: {
+    color: Colors.textLight,
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  tagEmoji: {
+    fontSize: 13,
+    marginRight: 4,
+  },
+  tagPill: {
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  tagPillText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  tagRow: {
+    gap: 8,
+    paddingBottom: 2,
+    paddingRight: 8,
+  },
+  titleRow: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  stockSubtext: {},
-  stockText: {
-    fontWeight: '500',
   },
 });

@@ -1,132 +1,63 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { ProductService } from '../services/ProductService';
-import type { Product } from '../types/Product';
+import { useState, useCallback, useMemo } from 'react';
+import { useHNStoriesQuery } from '../hooks/useHNStoriesQuery';
+import type { HNHit, HNStoryTag } from '../types/HNStory';
+
+export type SortOption = 'newest' | 'points' | 'comments';
 
 export const useHomeViewModel = (searchQuery = '') => {
-  const [rawProducts, setRawProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [inStockOnly, setInStockOnly] = useState(false);
-  const [sortBy, setSortBy] = useState<'none' | 'priceAsc' | 'priceDesc' | 'ratingDesc'>('none');
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<HNStoryTag>('story');
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
 
-  // Fetch categories once on mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await ProductService.getCategories();
-        if (response.success && response.data) {
-          setCategories(response.data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch categories:', err);
-      }
-    };
-    fetchCategories();
-  }, []);
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+    isRefetching,
+    error,
+  } = useHNStoriesQuery({ query: searchQuery, tag: selectedTag });
 
-  const fetchProducts = useCallback(async (isRefresh = false) => {
-    if (isRefresh) {
-      setIsRefreshing(true);
-    } else {
-      setIsLoading(true);
+  // Flatten paginated pages into a single sorted list
+  const stories = useMemo<HNHit[]>(() => {
+    if (!data) return [];
+    const flat = data.pages.flatMap((page: import('../types/HNStory').HNSearchResponse) => page.hits);
+
+    if (sortBy === 'points') {
+      return [...flat].sort((a, b) => (b.points ?? 0) - (a.points ?? 0));
     }
-    setError(null);
-
-    try {
-      let fetchedProducts: Product[] = [];
-
-      if (searchQuery.trim().length > 0) {
-        // If there's a search query, fetch using search API
-        const response = await ProductService.searchProducts(searchQuery);
-        if (response.success && response.data) {
-          fetchedProducts = response.data;
-          // Apply category filter client side if category is selected
-          if (selectedCategory) {
-            fetchedProducts = fetchedProducts.filter(
-              (p) => p.category.toLowerCase() === selectedCategory.toLowerCase()
-            );
-          }
-        }
-      } else if (selectedCategory) {
-        // Fetch products by category
-        const response = await ProductService.getProductsByCategory(selectedCategory, 1, 100);
-        if (response.success && response.data) {
-          fetchedProducts = response.data.data;
-        }
-      } else {
-        // Fetch all products
-        const response = await ProductService.getProducts(1, 100);
-        if (response.success && response.data) {
-          fetchedProducts = response.data.data;
-        }
-      }
-
-      setRawProducts(fetchedProducts);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch products';
-      setError(errorMessage);
-      console.error('Error fetching products:', err);
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
+    if (sortBy === 'comments') {
+      return [...flat].sort(
+        (a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0),
+      );
     }
-  }, [searchQuery, selectedCategory]);
-
-  // Refetch products when searchQuery or selectedCategory changes
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchProducts();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [fetchProducts]);
-
-  // Compute filtered and sorted products locally
-  const products = useMemo(() => {
-    let result = [...rawProducts];
-
-    // Filter by stock status
-    if (inStockOnly) {
-      result = result.filter((p) => p.inStock);
-    }
-
-    // Apply sorting
-    if (sortBy === 'priceAsc') {
-      result.sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'priceDesc') {
-      result.sort((a, b) => b.price - a.price);
-    } else if (sortBy === 'ratingDesc') {
-      result.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
-    }
-
-    return result;
-  }, [rawProducts, inStockOnly, sortBy]);
-
-  const clearFilters = useCallback(() => {
-    setSelectedCategory(null);
-    setInStockOnly(false);
-    setSortBy('none');
-  }, []);
+    // Default: newest — API already sorts by date
+    return flat;
+  }, [data, sortBy]);
 
   const handleRefresh = useCallback(() => {
-    fetchProducts(true);
-  }, [fetchProducts]);
+    refetch();
+  }, [refetch]);
+
+  const handleLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return {
-    products,
-    categories,
-    selectedCategory,
-    setSelectedCategory,
-    inStockOnly,
-    setInStockOnly,
+    stories,
+    isLoading,
+    isRefreshing: isRefetching,
+    isFetchingNextPage,
+    hasNextPage: !!hasNextPage,
+    error: error instanceof Error ? error.message : null,
+    selectedTag,
+    setSelectedTag,
     sortBy,
     setSortBy,
-    isLoading,
-    isRefreshing,
-    error,
-    clearFilters,
-    refreshProducts: handleRefresh,
+    refresh: handleRefresh,
+    loadMore: handleLoadMore,
   };
 };

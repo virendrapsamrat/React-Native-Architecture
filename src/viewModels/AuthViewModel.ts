@@ -21,7 +21,7 @@ export const useAuthViewModel = () => {
       }
       login(email, password);
     },
-    [login, validateLogin, clearError],
+    [login, validateLogin],
   );
 
   const signup = useCallback(
