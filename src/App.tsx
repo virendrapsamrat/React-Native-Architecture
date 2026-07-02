@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, LogBox } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useTheme } from './theme/ThemeProvider';
 import { Provider } from 'react-redux';
@@ -15,6 +15,7 @@ import { setDarkMode } from './store/redux/settings/settingsSlice';
 import { storageUtils } from './utils/storageUtils';
 import type { AuthUser } from './types/User';
 
+LogBox.ignoreAllLogs(true);
 const App = () => (
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
