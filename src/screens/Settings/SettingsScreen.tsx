@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { toggleNotifications, toggleDarkMode } from '../../store/redux/settings/settingsSlice';
 import { t } from '../../localization/i18n';
 import { useTheme } from '../../theme/ThemeProvider';
+import { storageUtils } from '../../utils/storageUtils';
 import { Colors } from '../../constants/Colors';
 
 export const SettingsScreen = () => {
@@ -43,7 +44,11 @@ export const SettingsScreen = () => {
           <Text variant="body">{t('settings.darkMode')}</Text>
           <Switch
             value={darkMode}
-            onValueChange={() => { dispatch(toggleDarkMode()); }}
+            onValueChange={() => {
+              const nextDarkMode = !darkMode;
+              dispatch(toggleDarkMode());
+              storageUtils.saveThemeMode(nextDarkMode ? 'dark' : 'light');
+            }}
             trackColor={{
               false: theme.colors.border,
               true: theme.colors.primary,

@@ -25,9 +25,12 @@ const settingsSlice = createSlice({
     toggleDarkMode: (state) => {
       state.darkMode = !state.darkMode;
     },
+    setDarkMode: (state, action: PayloadAction<boolean>) => {
+      state.darkMode = action.payload;
+    },
   },
 });
 
-export const { setLanguage, toggleNotifications, toggleDarkMode } =
+export const { setLanguage, toggleNotifications, toggleDarkMode, setDarkMode } =
   settingsSlice.actions;
 export default settingsSlice.reducer;
