@@ -89,7 +89,7 @@ export const setupResponseInterceptor = (client: AxiosInstance) => {
       logger.error(`API Error [${status}]:`, error.message);
 
       if (status === 401) {
-        await storageUtils.clearAll();
+        await storageUtils.clearAuthData();
       }
 
       return Promise.reject(error);

@@ -28,11 +28,12 @@ Then customize the app name, bundle IDs, API URLs, and branding.
 - TypeScript support
 - React Navigation with bottom tabs + native stack
 - Redux Toolkit state management
+- React Query v5 for API caching and data fetching
 - MVVM-style ViewModels
 - Feature-based folder structure
 - Localization support for `en`, `hi`, `te`
 - Analytics + notifications service hooks
-- Secure storage and async storage utilities
+- Secure storage and async storage utilities for auth persistence
 - Permission manager modules
 - Organized README docs inside `src/`
 
@@ -71,8 +72,10 @@ src/
 | Navigation | React Navigation v7 |
 | State | Redux Toolkit |
 | API | Axios |
+| State Management | Redux Toolkit |
+| Data Fetching | React Query v5 |
 | i18n | i18n-js + expo-localization |
-| Storage | AsyncStorage + Expo SecureStore |
+| Storage | AsyncStorage + Expo SecureStore (auth token saved securely) |
 
 ## Getting Started
 
