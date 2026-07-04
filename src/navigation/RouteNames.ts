@@ -1,15 +1,15 @@
 export const RouteNames = {
   AUTH: {
-    LOGIN: 'Login',
-    SIGNUP: 'Signup',
+    LOGIN: 'Login' as const,
+    SIGNUP: 'Signup' as const,
   },
   MAIN: {
-    HOME: 'Home',
-    PROFILE: 'Profile',
-    SETTINGS: 'Settings',
+    HOME: 'Home' as const,
+    PROFILE: 'Profile' as const,
+    SETTINGS: 'Settings' as const,
   },
   ROOT: {
-    AUTH: 'Auth',
-    MAIN: 'Main',
+    AUTH: 'Auth' as const,
+    MAIN: 'Main' as const,
   },
 } as const;
