@@ -1,30 +1,10 @@
-# API Layer
+# API layer
 
-Axios HTTP client configuration and interceptors.
+This folder contains the shared API client, endpoint definitions, interceptors, and React Query client setup.
 
-## Files
+## Responsibilities
 
-| File | Purpose |
-|------|---------|
-| `ApiClient.ts` | Pre-configured Axios instance |
-| `Endpoints.ts` | Centralized API route constants |
-| `Interceptors.ts` | Auth token injection, error handling |
-
-## ApiClient
-
-- Base URL: `config/env.ts` → `API_BASE_URL`
-- Timeout: 30 seconds
-- Auto-attaches Bearer token from secure storage
-- Auto-clears auth on 401 responses
-
-## Adding Endpoints
-
-```ts
-// Endpoints.ts
-export const Endpoints = {
-  ORDERS: {
-    LIST: '/orders',
-    DETAIL: (id: string) => `/orders/${id}`,
-  },
-};
-```
+- centralize HTTP configuration
+- define reusable endpoints
+- attach shared interceptors
+- provide a query client for data fetching

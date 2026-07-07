@@ -3,7 +3,7 @@ import { MainTemplate } from '../../components/templates/MainTemplate';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
 import { SettingsSection } from '../../components/organisms/SettingsSection';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../features/auth';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { toggleNotifications, toggleDarkMode } from '../../store/redux/settings/settingsSlice';
 import { t } from '../../localization/i18n';
@@ -81,4 +81,3 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 });
-

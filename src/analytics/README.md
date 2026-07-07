@@ -1,29 +1,13 @@
 # Analytics
 
-Event tracking integrations for Firebase and Mixpanel.
+Analytics logic is isolated in this folder so instrumentation can be changed without touching screen code.
 
-## Files
+## What is here
 
-| File | Purpose |
-|------|---------|
-| `FirebaseAnalytics.ts` | Firebase Analytics event logging |
-| `Mixpanel.ts` | Mixpanel event tracking |
-| `EventTracker.ts` | Unified facade for both providers |
+- EventTracker.ts for shared event helpers
+- FirebaseAnalytics.ts for Firebase-based analytics integration
+- Mixpanel.ts for Mixpanel tracking
 
 ## Usage
 
-```tsx
-import { EventTracker } from '../analytics/EventTracker';
-
-EventTracker.trackScreenView('Home');
-EventTracker.trackLogin('email');
-EventTracker.trackProductView(product.id);
-```
-
-## Integration
-
-Replace stub implementations with:
-- `@react-native-firebase/analytics` for Firebase
-- `mixpanel-react-native` for Mixpanel
-
-Toggle via `config/featureFlags.ts` → `enableAnalytics`.
+Use the analytics helpers from screens or services when a user action or important lifecycle event should be tracked.
