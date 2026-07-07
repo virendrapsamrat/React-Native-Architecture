@@ -2,21 +2,20 @@ import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FormField } from '../../../components/molecules/FormField';
-import { Button } from '../../../components/atoms/Button';
-import { Text } from '../../../components/atoms/Text';
-import { MainTemplate } from '../../../components/templates/MainTemplate';
-import { useAuthViewModel } from '../../../viewModels/AuthViewModel';
-import { t } from '../../../localization/i18n';
-import { Colors } from '../../../constants/Colors';
-import type { AuthStackParamList } from '../../../types/Navigation';
+import { FormField } from '../../../../components/molecules/FormField';
+import { Button } from '../../../../components/atoms/Button';
+import { Text } from '../../../../components/atoms/Text';
+import { MainTemplate } from '../../../../components/templates/MainTemplate';
+import { useAuthViewModel } from '../../hooks/useAuthViewModel';
+import { t } from '../../../../localization/i18n';
+import { Colors } from '../../../../constants/Colors';
+import type { AuthStackParamList } from '../../../../types/Navigation';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
-  const { login, isLoading, error } = useAuthViewModel();
-  // Test credentials pre-filled for development
-  const [email, setEmail] = useState('test@example.com');
-  const [password, setPassword] = useState('Password123');
+  const { login, isLoading, error, clearError } = useAuthViewModel();
+  const [email, setEmail] = useState(__DEV__ ? 'test@example.com' : '');
+  const [password, setPassword] = useState(__DEV__ ? 'Password123' : '');
 
   const handleLogin = () => login(email, password);
 
@@ -29,14 +28,20 @@ export const LoginScreen = () => {
         <FormField
           label={t('auth.email')}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(value) => {
+            clearError();
+            setEmail(value);
+          }}
           keyboardType="email-address"
           autoCapitalize="none"
         />
         <FormField
           label={t('auth.password')}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={(value) => {
+            clearError();
+            setPassword(value);
+          }}
           secureTextEntry
         />
         {error && (

@@ -1,39 +1,14 @@
 # Navigation
 
-React Navigation v7 setup with auth-gated routing.
+Navigation is built with React Navigation and is responsible for switching between auth and main app flows.
 
-## Files
+## Main pieces
 
-| File | Purpose |
-|------|---------|
-| `AppNavigator.tsx` | Root navigator — switches between Auth and Main |
-| `AuthNavigator.tsx` | Login & Signup stack |
-| `BottomTabNavigator.tsx` | Home, Profile, Settings tabs |
-| `RouteNames.ts` | Centralized route name constants |
+- AppNavigator.tsx selects the root flow based on auth state.
+- AuthNavigator.tsx hosts login and signup screens.
+- BottomTabNavigator.tsx hosts Home, Profile, and Settings.
+- RouteNames.tsx centralizes route constants.
 
 ## Flow
 
-```
-AppNavigator
-├── Auth (unauthenticated)
-│   ├── Login
-│   └── Signup
-└── Main (authenticated)
-    ├── Home (tab)
-    ├── Profile (tab)
-    └── Settings (tab)
-```
-
-## Usage
-
-```tsx
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
-navigation.navigate('Signup');
-```
-
-## Type Safety
-
-All route params are typed in `types/Navigation.ts`. Use `RouteNames` constants instead of string literals.
+Unauthenticated users see the auth stack. Authenticated users see the main tab stack.

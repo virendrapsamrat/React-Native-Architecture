@@ -1,10 +1,11 @@
-import ApiClient from './api/ApiClient';
-import { Endpoints } from './api/Endpoints';
-import type { ApiResponse } from '../types/ApiResponse';
-import type { AuthUser } from '../types/User';
+import ApiClient from '../../../services/api/ApiClient';
+import { Endpoints } from '../../../services/api/Endpoints';
+import type { ApiResponse } from '../../../types/ApiResponse';
+import type { AuthUser } from '../../../types/User';
+import type { LoginPayload, SignupPayload } from '../types';
 
 export const AuthService = {
-  login: async (email: string, password: string) => {
+  login: async ({ email, password }: LoginPayload) => {
     const response = await ApiClient.post<ApiResponse<AuthUser>>(
       Endpoints.AUTH.LOGIN,
       { email, password },
@@ -12,7 +13,7 @@ export const AuthService = {
     return response.data;
   },
 
-  signup: async (data: { email: string; password: string; firstName: string; lastName: string }) => {
+  signup: async (data: SignupPayload) => {
     const response = await ApiClient.post<ApiResponse<AuthUser>>(
       Endpoints.AUTH.SIGNUP,
       data,

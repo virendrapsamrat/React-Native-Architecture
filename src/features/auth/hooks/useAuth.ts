@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { loginUser, logoutUser, clearAuthError } from '../store/redux/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import {
+  clearAuthError,
+  loginUser,
+  logoutUser,
+  signupUser,
+} from '../store/authSlice';
+import type { LoginPayload, SignupPayload } from '../types';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -9,7 +15,12 @@ export const useAuth = () => {
   );
 
   const login = useCallback(
-    (email: string, password: string) => dispatch(loginUser({ email, password })),
+    (email: string, password: string) => dispatch(loginUser({ email, password } satisfies LoginPayload)),
+    [dispatch],
+  );
+
+  const signup = useCallback(
+    (payload: SignupPayload) => dispatch(signupUser(payload)),
     [dispatch],
   );
 
@@ -23,6 +34,7 @@ export const useAuth = () => {
     isLoading,
     error,
     login,
+    signup,
     logout,
     clearError,
   };

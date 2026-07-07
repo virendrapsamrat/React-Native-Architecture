@@ -1,16 +1,10 @@
 import React from 'react';
 import TestRenderer, { act } from 'react-test-renderer';
-import { useAuthViewModel } from '../AuthViewModel';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthViewModel } from '../useAuthViewModel';
+import { useAuth } from '../useAuth';
 
-jest.mock('../../hooks/useAuth', () => ({
+jest.mock('../useAuth', () => ({
   useAuth: jest.fn(),
-}));
-
-jest.mock('../../services/AuthService', () => ({
-  AuthService: {
-    signup: jest.fn(),
-  },
 }));
 
 describe('useAuthViewModel', () => {
@@ -26,35 +20,47 @@ describe('useAuthViewModel', () => {
       TestRenderer.create(React.createElement(HookProbe));
     });
 
-    return hookValue as ReturnType<typeof useAuthViewModel>;
+    return () => hookValue as ReturnType<typeof useAuthViewModel>;
   };
 
-  it('returns a validation error for invalid email input', () => {
-    (useAuth as jest.Mock).mockReturnValue({
-      login: jest.fn(),
-      isLoading: false,
-      error: null,
-      clearError: jest.fn(),
-    });
-
-    const hookValue = renderHookValue();
-
-    expect(hookValue.login('not-an-email', 'Password123')).toBeUndefined();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('calls login when validation succeeds', () => {
+  it('keeps invalid login input in the view-model boundary', () => {
     const login = jest.fn();
     (useAuth as jest.Mock).mockReturnValue({
       login,
+      signup: jest.fn(),
       isLoading: false,
       error: null,
       clearError: jest.fn(),
     });
 
-    const hookValue = renderHookValue();
+    const getHookValue = renderHookValue();
 
     act(() => {
-      hookValue.login('user@example.com', 'Password123');
+      getHookValue().login('not-an-email', 'Password123');
+    });
+
+    expect(login).not.toHaveBeenCalled();
+    expect(getHookValue().error).toBe('Invalid email address');
+  });
+
+  it('dispatches login when validation succeeds', () => {
+    const login = jest.fn();
+    (useAuth as jest.Mock).mockReturnValue({
+      login,
+      signup: jest.fn(),
+      isLoading: false,
+      error: null,
+      clearError: jest.fn(),
+    });
+
+    const getHookValue = renderHookValue();
+
+    act(() => {
+      getHookValue().login('user@example.com', 'Password123');
     });
 
     expect(login).toHaveBeenCalledWith('user@example.com', 'Password123');

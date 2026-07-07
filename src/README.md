@@ -1,33 +1,24 @@
-# src/
+# src directory
 
-Root source directory for the application. All application code lives here.
+This folder contains the application implementation. It is structured so that each layer has a distinct responsibility:
 
-## Entry Points
+- entry and app bootstrap
+- navigation and routing
+- feature modules
+- screens and view models
+- services and storage
+- shared UI, theme, localization, and constants
 
-- `index.js` — Registers the root component with Expo
-- `App.tsx` — Root component wiring Redux, Theme, Auth, and Navigation
+## Main flow
 
-## Module Index
+1. The app shell in App.tsx initializes providers.
+2. AppNavigator chooses auth or main navigation.
+3. Feature screens consume hooks, view models, and services.
+4. Redux and React Query manage local and remote state.
 
-| Folder | Purpose |
-|--------|---------|
-| `assets/` | Static media files |
-| `components/` | Reusable UI (Atomic Design) |
-| `screens/` | Full-screen views |
-| `navigation/` | Route configuration |
-| `viewModels/` | Screen business logic |
-| `services/` | API & backend communication |
-| `store/` | Global state (Redux) |
-| `hooks/` | Shared React hooks |
-| `utils/` | Helper functions |
-| `constants/` | Static app values |
-| `types/` | TypeScript interfaces |
-| `theme/` | Theming system |
-| `localization/` | Multi-language support |
-| `context/` | React Context providers |
-| `permissions/` | Device permissions |
-| `storage/` | Data persistence |
-| `analytics/` | Event tracking |
-| `notifications/` | Push notifications |
-| `config/` | App configuration |
-| `tests/` | Test utilities |
+## Suggested mental model
+
+- UI layer: screens and components
+- Logic layer: hooks, view models, and feature modules
+- Data layer: services, storage, and Redux
+- Platform layer: navigation, permissions, notifications, and analytics
