@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { ThemeMode } from '../../../types/ThemeMode';
 
 interface SettingsState {
   language: string;
   notificationsEnabled: boolean;
   darkMode: boolean;
+  themeMode: ThemeMode;
 }
 
 const initialState: SettingsState = {
   language: 'en',
   notificationsEnabled: true,
   darkMode: false,
+  themeMode: 'system',
 };
 
 const settingsSlice = createSlice({
@@ -22,15 +25,17 @@ const settingsSlice = createSlice({
     toggleNotifications: (state) => {
       state.notificationsEnabled = !state.notificationsEnabled;
     },
-    toggleDarkMode: (state) => {
-      state.darkMode = !state.darkMode;
+    setThemeMode: (state, action: PayloadAction<ThemeMode>) => {
+      state.themeMode = action.payload;
+      state.darkMode = action.payload === 'dark';
     },
-    setDarkMode: (state, action: PayloadAction<boolean>) => {
-      state.darkMode = action.payload;
+    toggleDarkMode: (state) => {
+      state.themeMode = state.themeMode === 'dark' ? 'light' : 'dark';
+      state.darkMode = state.themeMode === 'dark';
     },
   },
 });
 
-export const { setLanguage, toggleNotifications, toggleDarkMode, setDarkMode } =
+export const { setLanguage, toggleNotifications, toggleDarkMode, setThemeMode } =
   settingsSlice.actions;
 export default settingsSlice.reducer;

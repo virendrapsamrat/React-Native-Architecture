@@ -1,4 +1,4 @@
-import ApiClient from './api/ApiClient';
+import { DemoApiClient } from './api/DemoApiClient';
 import { Endpoints } from './api/Endpoints';
 import type { ApiResponse, PaginatedResponse } from '../types/ApiResponse';
 import type { Product } from '../types/Product';
@@ -35,7 +35,7 @@ const mapDummyProductToProduct = (p: DummyJsonProduct): Product => ({
 export const ProductService = {
   getProducts: async (page = 1, limit = 20): Promise<ApiResponse<PaginatedResponse<Product>>> => {
     const skip = (page - 1) * limit;
-    const response = await ApiClient.get<DummyJsonResponse>(
+    const response = await DemoApiClient.get<DummyJsonResponse>(
       Endpoints.PRODUCTS.LIST,
       { params: { limit, skip } },
     );
@@ -56,7 +56,7 @@ export const ProductService = {
   },
 
   getProduct: async (id: string): Promise<ApiResponse<Product>> => {
-    const response = await ApiClient.get<DummyJsonProduct>(
+    const response = await DemoApiClient.get<DummyJsonProduct>(
       Endpoints.PRODUCTS.DETAIL(id),
     );
     return {
@@ -66,7 +66,7 @@ export const ProductService = {
   },
 
   searchProducts: async (query: string): Promise<ApiResponse<Product[]>> => {
-    const response = await ApiClient.get<DummyJsonResponse>(
+    const response = await DemoApiClient.get<DummyJsonResponse>(
       Endpoints.PRODUCTS.SEARCH,
       { params: { q: query } },
     );
@@ -82,7 +82,7 @@ export const ProductService = {
       name: string;
       url: string;
     }
-    const response = await ApiClient.get<Array<string | CategoryItem>>('/products/categories');
+    const response = await DemoApiClient.get<Array<string | CategoryItem>>('/products/categories');
     let categories: string[] = [];
     if (Array.isArray(response.data)) {
       categories = response.data
@@ -108,7 +108,7 @@ export const ProductService = {
     limit = 20,
   ): Promise<ApiResponse<PaginatedResponse<Product>>> => {
     const skip = (page - 1) * limit;
-    const response = await ApiClient.get<DummyJsonResponse>(
+    const response = await DemoApiClient.get<DummyJsonResponse>(
       `/products/category/${categoryName}`,
       { params: { limit, skip } },
     );

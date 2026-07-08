@@ -1,10 +1,11 @@
 import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import en from './en.json';
+import es from './es.json';
 import hi from './hi.json';
 import te from './te.json';
 
-const i18n = new I18n({ en, hi, te });
+const i18n = new I18n({ en, es, hi, te });
 
 i18n.locale = Localization.getLocales()[0]?.languageCode ?? 'en';
 i18n.enableFallback = true;

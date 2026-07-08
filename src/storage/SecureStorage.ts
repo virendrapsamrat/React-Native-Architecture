@@ -4,11 +4,20 @@ import { logger } from '../utils/logger';
 
 const isWeb = Platform.OS === 'web';
 
+const getWebStorage = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return window.sessionStorage;
+};
+
 export const secureStorage = {
   getItem: async (key: string): Promise<string | null> => {
     try {
       if (isWeb) {
-        return localStorage.getItem(key);
+        const webStorage = getWebStorage();
+        return webStorage ? webStorage.getItem(key) : null;
       }
       return await SecureStore.getItemAsync(key);
     } catch (error) {
@@ -20,8 +29,11 @@ export const secureStorage = {
   setItem: async (key: string, value: string): Promise<void> => {
     try {
       if (isWeb) {
-        localStorage.setItem(key, value);
-        return;
+        const webStorage = getWebStorage();
+        if (webStorage) {
+          webStorage.setItem(key, value);
+          return;
+        }
       }
       await SecureStore.setItemAsync(key, value);
     } catch (error) {
@@ -32,8 +44,11 @@ export const secureStorage = {
   removeItem: async (key: string): Promise<void> => {
     try {
       if (isWeb) {
-        localStorage.removeItem(key);
-        return;
+        const webStorage = getWebStorage();
+        if (webStorage) {
+          webStorage.removeItem(key);
+          return;
+        }
       }
       await SecureStore.deleteItemAsync(key);
     } catch (error) {

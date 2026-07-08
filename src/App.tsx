@@ -9,12 +9,16 @@ import { store } from './store/redux/store';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { AppNavigator } from './navigation/AppNavigator';
 import { useAppDispatch } from './store/hooks';
-import { setUser } from './features/auth';
-import { setDarkMode } from './store/redux/settings/settingsSlice';
+import { logoutUser, setUser } from './features/auth';
+import { setLanguage, setThemeMode } from './store/redux/settings/settingsSlice';
 import { storageUtils } from './utils/storageUtils';
+import { logoutCoordinator } from './utils/logoutCoordinator';
+import { setLocale } from './localization/i18n';
 import type { AuthUser } from './types/User';
 
-LogBox.ignoreAllLogs(true);
+if (__DEV__ && process.env.EXPO_PUBLIC_IGNORE_LOGBOX === 'true') {
+  LogBox.ignoreAllLogs(true);
+}
 const App = () => (
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
@@ -30,13 +34,19 @@ const AppStartup = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const restoreAppState = async () => {
-      const themeMode = await storageUtils.getThemeMode();
+    const unregisterLogoutHandler = logoutCoordinator.registerHandler(() => {
+      dispatch(logoutUser());
+    });
 
-      if (themeMode === 'dark') {
-        dispatch(setDarkMode(true));
-      } else if (themeMode === 'light') {
-        dispatch(setDarkMode(false));
+    const restoreAppState = async () => {
+      const storedThemeMode = await storageUtils.getThemeMode();
+      const themeMode = storedThemeMode ?? 'system';
+      dispatch(setThemeMode(themeMode));
+
+      const storedLanguage = await storageUtils.getLanguage();
+      if (storedLanguage) {
+        dispatch(setLanguage(storedLanguage));
+        setLocale(storedLanguage);
       }
 
       const authToken = await storageUtils.getAuthToken();
@@ -50,6 +60,10 @@ const AppStartup = () => {
     };
 
     restoreAppState();
+
+    return () => {
+      unregisterLogoutHandler();
+    };
   }, [dispatch]);
 
   if (!isReady) {

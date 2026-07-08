@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "Aplicación de Arquitectura RN",
+    "welcome": "Bienvenido"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?"
+  },
+  "home": {
+    "title": "Inicio",
+    "searchPlaceholder": "Buscar productos..."
+  },
+  "profile": {
+    "title": "Perfil",
+    "followers": "Seguidores",
+    "following": "Siguiendo",
+    "posts": "Publicaciones"
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "notifications": "Notificaciones",
+    "darkMode": "Modo oscuro",
+    "logout": "Cerrar sesión"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "retry": "Reintentar",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  }
+}
