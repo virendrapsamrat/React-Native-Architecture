@@ -20,10 +20,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const systemColorScheme = useColorScheme();
-  const reduxDarkMode = useAppSelector((state) => state.settings.darkMode);
-  
-  // Use Redux dark mode if enabled, otherwise use system color scheme
-  const isDark = reduxDarkMode || systemColorScheme === 'dark';
+  const themeMode = useAppSelector((state) => state.settings.themeMode);
+
+  const isDark =
+    themeMode === 'dark' || (themeMode === 'system' && systemColorScheme === 'dark');
 
   const value = useMemo(
     () => ({

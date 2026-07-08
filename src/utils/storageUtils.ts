@@ -1,6 +1,7 @@
 import { StorageKeys } from '../constants/StorageKeys';
 import { asyncStorage } from '../storage/AsyncStorage';
 import { secureStorage } from '../storage/SecureStorage';
+import type { ThemeMode } from '../types/ThemeMode';
 
 export const storageUtils = {
   saveAuthToken: (token: string) =>
@@ -17,10 +18,18 @@ export const storageUtils = {
 
   removeUserData: () => asyncStorage.removeItem(StorageKeys.USER_DATA),
 
-  saveThemeMode: (mode: 'light' | 'dark') =>
+  saveThemeMode: (mode: ThemeMode) =>
     asyncStorage.setItem(StorageKeys.THEME_MODE, mode),
 
-  getThemeMode: () => asyncStorage.getItem<string>(StorageKeys.THEME_MODE),
+  saveLanguage: (language: string) =>
+    asyncStorage.setItem(StorageKeys.LANGUAGE, language),
+
+  getLanguage: () => asyncStorage.getItem<string>(StorageKeys.LANGUAGE),
+
+  getThemeMode: async (): Promise<ThemeMode | null> => {
+    const mode = await asyncStorage.getItem<string>(StorageKeys.THEME_MODE);
+    return mode === 'light' || mode === 'dark' || mode === 'system' ? mode : null;
+  },
 
   removeThemeMode: () => asyncStorage.removeItem(StorageKeys.THEME_MODE),
 

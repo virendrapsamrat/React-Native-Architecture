@@ -2,6 +2,7 @@ import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { storageUtils } from '../../utils/storageUtils';
 import { logger } from '../../utils/logger';
 import { devAuthAdapter } from '../../features/auth/services/devAuthAdapter';
+import { logoutCoordinator } from '../../utils/logoutCoordinator';
 
 export const setupRequestInterceptor = (client: AxiosInstance) => {
   client.interceptors.request.use(
@@ -40,6 +41,7 @@ export const setupResponseInterceptor = (client: AxiosInstance) => {
 
       if (status === 401) {
         await storageUtils.clearAuthData();
+        logoutCoordinator.triggerLogout();
       }
 
       return Promise.reject(error);
