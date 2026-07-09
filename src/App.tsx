@@ -8,7 +8,7 @@ import { queryClient } from './services/api/queryClient';
 import { store } from './store/redux/store';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { AppNavigator } from './navigation/AppNavigator';
-import { useAppDispatch } from './store/hooks';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { logoutUser, setSession } from './features/auth';
 import { setLanguage, setThemeMode } from './store/redux/settings/settingsSlice';
 import { storageUtils } from './utils/storageUtils';
@@ -32,6 +32,7 @@ const App = () => (
 const AppStartup = () => {
   const [isReady, setIsReady] = useState(false);
   const dispatch = useAppDispatch();
+  const language = useAppSelector((state) => state.settings.language);
 
   useEffect(() => {
     const unregisterLogoutHandler = logoutCoordinator.registerHandler(() => {
@@ -78,7 +79,7 @@ const AppStartup = () => {
   return (
     <>
       <WithThemedStatusBar />
-      <AppNavigator />
+      <AppNavigator key={language} />
     </>
   );
 };

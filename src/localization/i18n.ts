@@ -14,6 +14,12 @@ i18n.defaultLocale = 'en';
 export const t = (key: string, options?: Record<string, unknown>) =>
   i18n.t(key, options);
 
+export const tForLocale = (
+  locale: string,
+  key: string,
+  options?: Record<string, unknown>,
+) => i18n.t(key, { ...options, locale });
+
 export const setLocale = (locale: string) => {
   i18n.locale = locale;
 };

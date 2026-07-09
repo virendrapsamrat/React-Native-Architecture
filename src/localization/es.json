@@ -26,6 +26,8 @@
   "settings": {
     "title": "Configuración",
     "language": "Idioma",
+    "confirmLanguageTitle": "¿Cambiar idioma?",
+    "confirmLanguageMessage": "¿Seguro que quieres elegir",
     "notifications": "Notificaciones",
     "darkMode": "Modo oscuro",
     "logout": "Cerrar sesión"
@@ -35,6 +37,7 @@
     "error": "Algo salió mal",
     "retry": "Reintentar",
     "save": "Guardar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "reload": "Recargar"
   }
 }
