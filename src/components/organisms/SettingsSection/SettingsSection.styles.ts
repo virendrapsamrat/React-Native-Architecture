@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colors } from '../../../constants/Colors';
+import { Colors } from '@/constants/Colors';
 
 export const settingsSectionStyles = StyleSheet.create({
   container: {

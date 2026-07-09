@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { useColorScheme } from 'react-native';
-import { useAppSelector } from '../store/hooks';
+import { useAppSelector } from '@/store/hooks';
 import { lightTheme } from './lightTheme';
 import { darkTheme } from './darkTheme';
 

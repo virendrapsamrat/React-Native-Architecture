@@ -1,7 +1,7 @@
 import type { AxiosInstance } from 'axios';
-import { setupResponseInterceptor } from '../Interceptors';
-import { storageUtils } from '../../../utils/storageUtils';
-import { logoutCoordinator } from '../../../utils/logoutCoordinator';
+import { setupResponseInterceptor } from '@/services/api/Interceptors';
+import { storageUtils } from '@/utils/storageUtils';
+import { logoutCoordinator } from '@/utils/logoutCoordinator';
 
 jest.mock('../../../utils/storageUtils', () => ({
   storageUtils: {

@@ -1,8 +1,8 @@
 import ApiClient from './api/ApiClient';
 import { Endpoints } from './api/Endpoints';
-import type { ApiResponse } from '../types/ApiResponse';
-import type { User } from '../types/User';
-import type { Profile } from '../types/Profile';
+import type { ApiResponse } from '@/types/ApiResponse';
+import type { User } from '@/types/User';
+import type { Profile } from '@/types/Profile';
 
 export const UserService = {
   getProfile: async () => {

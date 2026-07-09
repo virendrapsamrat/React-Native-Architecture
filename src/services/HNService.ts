@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { HNSearchResponse, HNStoryTag } from '../types/HNStory';
+import type { HNSearchResponse, HNStoryTag } from '@/types/HNStory';
 
 const HN_BASE_URL = 'https://hn.algolia.com/api/v1/search_by_date';
 

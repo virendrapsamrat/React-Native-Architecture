@@ -1,4 +1,4 @@
-import { Regex } from '../constants/Regex';
+import { Regex } from '@/constants/Regex';
 
 export const isValidEmail = (email: string): boolean => Regex.EMAIL.test(email);
 

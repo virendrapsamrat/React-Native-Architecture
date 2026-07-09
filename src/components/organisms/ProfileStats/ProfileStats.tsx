@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { UserStat } from '../../molecules/UserStat';
+import { UserStat } from '@/components/molecules/UserStat';
 import { profileStatsStyles } from './ProfileStats.styles';
-import type { ProfileStat } from '../../../types/Profile';
+import type { ProfileStat } from '@/types/Profile';
 
 interface ProfileStatsProps {
   stats: ProfileStat[];

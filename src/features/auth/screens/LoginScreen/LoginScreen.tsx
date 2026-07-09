@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FormField } from '../../../../components/molecules/FormField';
-import { Button } from '../../../../components/atoms/Button';
-import { Text } from '../../../../components/atoms/Text';
-import { MainTemplate } from '../../../../components/templates/MainTemplate';
-import { useAuthViewModel } from '../../hooks/useAuthViewModel';
-import { t } from '../../../../localization/i18n';
-import { Colors } from '../../../../constants/Colors';
-import type { AuthStackParamList } from '../../../../types/Navigation';
+import { FormField } from '@/components/molecules/FormField';
+import { Button } from '@/components/atoms/Button';
+import { Text } from '@/components/atoms/Text';
+import { MainTemplate } from '@/components/templates/MainTemplate';
+import { useAuthViewModel } from '@/features/auth/hooks/useAuthViewModel';
+import { t } from '@/localization/i18n';
+import { Colors } from '@/constants/Colors';
+import type { AuthStackParamList } from '@/types/Navigation';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();

@@ -1,5 +1,5 @@
-import { logger } from '../utils/logger';
-import { featureFlags } from '../config/featureFlags';
+import { logger } from '@/utils/logger';
+import { featureFlags } from '@/config/featureFlags';
 
 export const Mixpanel = {
   track: (event: string, properties?: Record<string, unknown>) => {

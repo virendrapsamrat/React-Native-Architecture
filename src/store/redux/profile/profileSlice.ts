@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { Profile } from '../../../types/Profile';
+import type { Profile } from '@/types/Profile';
 
 interface ProfileState {
   profile: Profile | null;

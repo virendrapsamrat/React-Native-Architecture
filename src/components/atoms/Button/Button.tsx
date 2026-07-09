@@ -8,7 +8,7 @@ import {
   TextStyle,
 } from 'react-native';
 import { buttonStyles } from './Button.styles';
-import { Colors } from '../../../constants/Colors';
+import { Colors } from '@/constants/Colors';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';

@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen } from '../features/home';
-import { ProfileScreen } from '../features/profile';
-import { SettingsScreen } from '../features/settings';
+import { HomeScreen } from '@/features/home';
+import { ProfileScreen } from '@/features/profile';
+import { SettingsScreen } from '@/features/settings';
 import { RouteNames } from './RouteNames';
-import { Icon } from '../components/atoms/Icon';
-import { useTheme } from '../theme/ThemeProvider';
-import { t } from '../localization/i18n';
-import type { BottomTabParamList } from '../types/Navigation';
+import { Icon } from '@/components/atoms/Icon';
+import { useTheme } from '@/theme/ThemeProvider';
+import { t } from '@/localization/i18n';
+import type { BottomTabParamList } from '@/types/Navigation';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 

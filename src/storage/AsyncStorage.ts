@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { logger } from '../utils/logger';
+import { logger } from '@/utils/logger';
 
 const isWeb = Platform.OS === 'web';
 

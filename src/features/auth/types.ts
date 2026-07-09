@@ -1,4 +1,4 @@
-import type { User } from '../../types/User';
+import type { User } from '@/types/User';
 
 export interface LoginPayload {
   email: string;

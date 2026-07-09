@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, TextInput, TextInputProps } from 'react-native';
-import { Text } from '../../atoms/Text';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { Text } from '@/components/atoms/Text';
+import { useTheme } from '@/theme/ThemeProvider';
 import { formFieldStyles } from './FormField.styles';
-import { Colors } from '../../../constants/Colors';
+import { Colors } from '@/constants/Colors';
 
 interface FormFieldProps extends TextInputProps {
   label: string;

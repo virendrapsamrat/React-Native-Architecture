@@ -1,4 +1,4 @@
-import { logoutCoordinator } from '../logoutCoordinator';
+import { logoutCoordinator } from '@/utils/logoutCoordinator';
 
 describe('logoutCoordinator', () => {
   it('notifies registered handlers once', () => {

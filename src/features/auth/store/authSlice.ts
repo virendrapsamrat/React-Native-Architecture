@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthService } from '../services/authService';
-import { storageUtils } from '../../../utils/storageUtils';
-import type { AuthUser } from '../../../types/User';
-import type { AuthSession, AuthState, LoginPayload, SignupPayload } from '../types';
+import { AuthService } from '@/features/auth/services/authService';
+import { storageUtils } from '@/utils/storageUtils';
+import type { AuthUser } from '@/types/User';
+import type { AuthSession, AuthState, LoginPayload, SignupPayload } from '@/features/auth/types';
 
 const initialState: AuthState = {
   user: null,

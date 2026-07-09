@@ -1,4 +1,4 @@
-import { logger } from '../utils/logger';
+import { logger } from '@/utils/logger';
 
 export const requestCameraPermission = async (): Promise<boolean> => {
   logger.info('Requesting camera permission');

@@ -1,7 +1,7 @@
 import React from 'react';
 import TestRenderer, { act } from 'react-test-renderer';
-import { useAuthViewModel } from '../useAuthViewModel';
-import { useAuth } from '../useAuth';
+import { useAuthViewModel } from '@/features/auth/hooks/useAuthViewModel';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 jest.mock('../useAuth', () => ({
   useAuth: jest.fn(),

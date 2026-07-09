@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Text } from '../../atoms/Text';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { Text } from '@/components/atoms/Text';
+import { useTheme } from '@/theme/ThemeProvider';
 import { settingsSectionStyles } from './SettingsSection.styles';
 
 interface SettingsSectionProps {
