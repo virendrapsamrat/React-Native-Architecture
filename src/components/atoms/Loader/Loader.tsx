@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { useTheme } from '@/theme/ThemeProvider';
 import { loaderStyles } from './Loader.styles';
 
 interface LoaderProps {

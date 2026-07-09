@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { HNService } from '../services/HNService';
-import type { HNSearchResponse, HNStoryTag } from '../types/HNStory';
+import { HNService } from '@/services/HNService';
+import type { HNSearchResponse, HNStoryTag } from '@/types/HNStory';
 
 interface UseHNStoriesQueryOptions {
   query?: string;

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { env } from '../../config/env';
-import { AppConstants } from '../../constants/AppConstants';
+import { env } from '@/config/env';
+import { AppConstants } from '@/constants/AppConstants';
 import { setupRequestInterceptor, setupResponseInterceptor } from './Interceptors';
 
 const baseURL = env.API_VERSION

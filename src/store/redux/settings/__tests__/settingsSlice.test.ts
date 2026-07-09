@@ -1,4 +1,4 @@
-import settingsReducer, { setThemeMode } from '../settingsSlice';
+import settingsReducer, { setThemeMode } from '@/store/redux/settings/settingsSlice';
 
 describe('settings slice theme mode', () => {
   it('defaults to system theme mode', () => {

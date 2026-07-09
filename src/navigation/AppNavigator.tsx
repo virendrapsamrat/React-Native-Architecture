@@ -3,8 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthNavigator } from './AuthNavigator';
 import { BottomTabNavigator } from './BottomTabNavigator';
 import { RouteNames } from './RouteNames';
-import { useAuth } from '../features/auth';
-import type { RootStackParamList } from '../types/Navigation';
+import { useAuth } from '@/features/auth';
+import type { RootStackParamList } from '@/types/Navigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

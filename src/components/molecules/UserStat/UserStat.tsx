@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Text } from '../../atoms/Text';
-import { formatNumber } from '../../../utils/numberUtils';
+import { Text } from '@/components/atoms/Text';
+import { formatNumber } from '@/utils/numberUtils';
 import { useUserStatStyles } from './UserStat.styles';
 
 interface UserStatProps {

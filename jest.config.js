@@ -2,6 +2,9 @@
 
 module.exports = {
   preset: 'jest-expo',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@reduxjs/toolkit|immer))',

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Image, Text } from 'react-native';
 import { avatarStyles } from './Avatar.styles';
-import { useTheme } from '../../../theme/ThemeProvider';
-import { getInitials } from '../../../utils/stringUtils';
+import { useTheme } from '@/theme/ThemeProvider';
+import { getInitials } from '@/utils/stringUtils';
 
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 

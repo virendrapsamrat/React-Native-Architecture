@@ -33,3 +33,7 @@ This folder contains the application implementation. It is structured so that ea
 - `services`: API and integration boundaries
 - `store`: Redux store, slices, and typed hooks
 - `localization`: translations and i18n helpers
+
+## Imports
+
+Use `@/` for cross-folder imports from `src`, for example `@/services/HNService` or `@/features/auth`. Keep local `./` imports for sibling files such as `./Button.styles`.

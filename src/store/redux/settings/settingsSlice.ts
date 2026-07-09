@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { ThemeMode } from '../../../types/ThemeMode';
+import type { ThemeMode } from '@/types/ThemeMode';
 
 interface SettingsState {
   language: string;

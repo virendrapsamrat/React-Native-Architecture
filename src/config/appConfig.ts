@@ -1,4 +1,4 @@
-import { AppConstants } from '../constants/AppConstants';
+import { AppConstants } from '@/constants/AppConstants';
 import { brandConfig } from './brandConfig';
 
 export const appConfig = {

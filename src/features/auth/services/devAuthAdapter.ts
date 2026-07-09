@@ -1,7 +1,7 @@
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { logger } from '../../../utils/logger';
-import type { ApiResponse } from '../../../types/ApiResponse';
-import type { AuthUser } from '../../../types/User';
+import { logger } from '@/utils/logger';
+import type { ApiResponse } from '@/types/ApiResponse';
+import type { AuthUser } from '@/types/User';
 
 const TEST_CREDENTIALS = {
   email: 'test@example.com',

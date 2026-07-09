@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import { Text } from '../../atoms/Text';
-import { formatCurrency } from '../../../utils/numberUtils';
+import { Text } from '@/components/atoms/Text';
+import { formatCurrency } from '@/utils/numberUtils';
 import { productCardStyles } from './ProductCard.styles';
-import { useTheme } from '../../../theme/ThemeProvider';
-import type { Product } from '../../../types/Product';
+import { useTheme } from '@/theme/ThemeProvider';
+import type { Product } from '@/types/Product';
 
 interface ProductCardProps {
   product: Product;

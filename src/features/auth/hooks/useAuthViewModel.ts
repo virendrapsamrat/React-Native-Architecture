@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useAuth } from './useAuth';
-import { isValidEmail, isValidPassword } from '../../../utils/validationUtils';
-import type { AuthViewModel, SignupPayload } from '../types';
+import { isValidEmail, isValidPassword } from '@/utils/validationUtils';
+import type { AuthViewModel, SignupPayload } from '@/features/auth/types';
 
 export const useAuthViewModel = (): AuthViewModel => {
   const { login, signup, isLoading, error, clearError: clearAuthError } = useAuth();

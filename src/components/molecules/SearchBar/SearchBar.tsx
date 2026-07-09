@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput } from 'react-native';
-import { Icon } from '../../atoms/Icon';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { Icon } from '@/components/atoms/Icon';
+import { useTheme } from '@/theme/ThemeProvider';
 import { searchBarStyles } from './SearchBar.styles';
 
 interface SearchBarProps {

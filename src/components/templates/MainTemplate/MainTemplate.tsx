@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, SafeAreaView } from 'react-native';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { useTheme } from '@/theme/ThemeProvider';
 import { mainTemplateStyles } from './MainTemplate.styles';
 
 interface MainTemplateProps {

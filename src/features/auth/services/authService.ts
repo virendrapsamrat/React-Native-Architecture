@@ -1,8 +1,8 @@
-import ApiClient from '../../../services/api/ApiClient';
-import { Endpoints } from '../../../services/api/Endpoints';
-import type { ApiResponse } from '../../../types/ApiResponse';
-import type { AuthUser } from '../../../types/User';
-import type { LoginPayload, SignupPayload } from '../types';
+import ApiClient from '@/services/api/ApiClient';
+import { Endpoints } from '@/services/api/Endpoints';
+import type { ApiResponse } from '@/types/ApiResponse';
+import type { AuthUser } from '@/types/User';
+import type { LoginPayload, SignupPayload } from '@/features/auth/types';
 
 export const AuthService = {
   login: async ({ email, password }: LoginPayload) => {

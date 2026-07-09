@@ -1,6 +1,6 @@
-import { useAppSelector } from '../../../store/hooks';
-import { t } from '../../../localization/i18n';
-import type { ProfileStat } from '../../../types/Profile';
+import { useAppSelector } from '@/store/hooks';
+import { t } from '@/localization/i18n';
+import type { ProfileStat } from '@/types/Profile';
 
 export const useProfileViewModel = () => {
   const { user } = useAppSelector((s) => s.auth);

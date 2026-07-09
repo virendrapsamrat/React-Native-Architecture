@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { type LucideIcon } from 'lucide-react-native';
 import * as LucideIcons from 'lucide-react-native';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { useTheme } from '@/theme/ThemeProvider';
 
 const EMOJI_MAP: Record<string, keyof typeof LucideIcons> = {
   '🔍': 'Search',

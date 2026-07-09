@@ -1,8 +1,8 @@
-import authReducer, { loginUser, logoutUser, setSession } from '../authSlice';
-import { AuthService } from '../../services/authService';
-import { storageUtils } from '../../../../utils/storageUtils';
-import type { AuthState } from '../../types';
-import type { User } from '../../../../types/User';
+import authReducer, { loginUser, logoutUser, setSession } from '@/features/auth/store/authSlice';
+import { AuthService } from '@/features/auth/services/authService';
+import { storageUtils } from '@/utils/storageUtils';
+import type { AuthState } from '@/features/auth/types';
+import type { User } from '@/types/User';
 
 jest.mock('../../services/authService', () => ({
   AuthService: {

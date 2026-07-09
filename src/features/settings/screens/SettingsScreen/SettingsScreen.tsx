@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { View, Switch, StyleSheet, Pressable, Modal } from 'react-native';
-import { MainTemplate } from '../../../../components/templates/MainTemplate';
-import { Text } from '../../../../components/atoms/Text';
-import { Button } from '../../../../components/atoms/Button';
-import { SettingsSection } from '../../../../components/organisms/SettingsSection';
-import { useAuth } from '../../../auth';
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { setLanguage, setThemeMode, toggleNotifications } from '../../../../store/redux/settings/settingsSlice';
-import { t, tForLocale, setLocale } from '../../../../localization/i18n';
-import { useTheme } from '../../../../theme/ThemeProvider';
-import { storageUtils } from '../../../../utils/storageUtils';
-import { Colors } from '../../../../constants/Colors';
-import { AppConstants } from '../../../../constants/AppConstants';
+import { MainTemplate } from '@/components/templates/MainTemplate';
+import { Text } from '@/components/atoms/Text';
+import { Button } from '@/components/atoms/Button';
+import { SettingsSection } from '@/components/organisms/SettingsSection';
+import { useAuth } from '@/features/auth';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setLanguage, setThemeMode, toggleNotifications } from '@/store/redux/settings/settingsSlice';
+import { t, tForLocale, setLocale } from '@/localization/i18n';
+import { useTheme } from '@/theme/ThemeProvider';
+import { storageUtils } from '@/utils/storageUtils';
+import { Colors } from '@/constants/Colors';
+import { AppConstants } from '@/constants/AppConstants';
 
 export const SettingsScreen = () => {
   const { logout } = useAuth();

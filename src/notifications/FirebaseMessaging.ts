@@ -1,5 +1,5 @@
-import { logger } from '../utils/logger';
-import { NotificationService } from '../services/NotificationService';
+import { logger } from '@/utils/logger';
+import { NotificationService } from '@/services/NotificationService';
 
 export const FirebaseMessaging = {
   getToken: async (): Promise<string | null> => {

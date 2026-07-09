@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Fonts } from '../../../constants/Fonts';
+import { Fonts } from '@/constants/Fonts';
 
 export const textStyles = StyleSheet.create({
   body: { fontSize: Fonts.sizes.md, fontWeight: '400' },

@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   clearAuthError,
   loginUser,
   logoutUser,
   signupUser,
-} from '../store/authSlice';
-import type { LoginPayload, SignupPayload } from '../types';
+} from '@/features/auth/store/authSlice';
+import type { LoginPayload, SignupPayload } from '@/features/auth/types';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();

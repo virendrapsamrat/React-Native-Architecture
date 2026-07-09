@@ -1,6 +1,6 @@
 import ApiClient from './api/ApiClient';
 import { Endpoints } from './api/Endpoints';
-import type { ApiResponse } from '../types/ApiResponse';
+import type { ApiResponse } from '@/types/ApiResponse';
 
 export const NotificationService = {
   registerDevice: async (token: string) => {

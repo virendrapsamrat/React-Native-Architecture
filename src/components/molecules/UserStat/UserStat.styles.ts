@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { useTheme } from '../../../theme/ThemeProvider';
+import { useTheme } from '@/theme/ThemeProvider';
 
 export const useUserStatStyles = () => {
   const { theme } = useTheme();

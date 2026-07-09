@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Avatar } from '../../atoms/Avatar';
-import { Text } from '../../atoms/Text';
+import { Avatar } from '@/components/atoms/Avatar';
+import { Text } from '@/components/atoms/Text';
 import { profileInfoStyles } from './ProfileInfo.styles';
 
 interface ProfileInfoProps {

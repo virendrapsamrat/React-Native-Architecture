@@ -1,7 +1,7 @@
 import { DemoApiClient } from './api/DemoApiClient';
 import { Endpoints } from './api/Endpoints';
-import type { ApiResponse, PaginatedResponse } from '../types/ApiResponse';
-import type { Product } from '../types/Product';
+import type { ApiResponse, PaginatedResponse } from '@/types/ApiResponse';
+import type { Product } from '@/types/Product';
 
 interface DummyJsonProduct {
   id: number;

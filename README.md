@@ -60,6 +60,17 @@ Current feature hooks:
 - `src/features/home/hooks/useHomeViewModel`
 - `src/features/profile/hooks/useProfileViewModel`
 
+## Import aliases
+
+Use `@/` for imports that cross folders under `src`:
+
+```ts
+import { Button } from '@/components/atoms/Button';
+import { useHomeViewModel } from '@/features/home/hooks/useHomeViewModel';
+```
+
+Keep `./` imports for files in the same local folder, such as styles or index exports. The alias is configured in `tsconfig.json`, `babel.config.js`, `jest.config.js`, and `metro.config.js`.
+
 ## Development commands
 
 ```bash
