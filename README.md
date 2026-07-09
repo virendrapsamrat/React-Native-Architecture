@@ -69,7 +69,7 @@ import { Button } from '@/components/atoms/Button';
 import { useHomeViewModel } from '@/features/home/hooks/useHomeViewModel';
 ```
 
-Keep `./` imports for files in the same local folder, such as styles or index exports. The alias is configured in `tsconfig.json`, `babel.config.js`, `jest.config.js`, and `metro.config.js`.
+Keep `./` imports for files in the same local folder, such as styles or index exports. The alias is configured in `tsconfig.json`, `babel.config.js`, and `jest.config.js`.
 
 ## Development commands
 
