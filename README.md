@@ -8,7 +8,7 @@ This repository is a React Native + Expo TypeScript starter that follows a featu
 - The app restores persisted theme, language, and auth state before rendering navigation.
 - Authenticated users enter the main tab flow; unauthenticated users go to the auth flow.
 - Screens live under `src/features/<feature>/screens` and stay focused on UI composition.
-- Screen-specific logic is delegated to view models or feature hooks where applicable.
+- Screen-specific logic is delegated to feature hooks where applicable.
 - Remote data is handled through service modules and React Query.
 - Local persistence uses storage helpers for theme, auth, and user data.
 - Language changes are confirmed in Settings, saved, and applied by remounting the navigator with the selected locale.
@@ -19,7 +19,7 @@ This repository is a React Native + Expo TypeScript starter that follows a featu
 2. `AppNavigator` decides whether to show `AuthNavigator` or `BottomTabNavigator`.
 3. `AuthNavigator` routes to auth feature screens.
 4. `BottomTabNavigator` routes to home, profile, and settings feature screens.
-5. Feature screens use hooks, view models, services, Redux, and React Query to render current state.
+5. Feature screens use hooks, services, Redux, and React Query to render current state.
 6. Settings language changes update i18n, persist the locale, and remount navigation so visible labels refresh.
 
 ## Main folders
@@ -27,7 +27,6 @@ This repository is a React Native + Expo TypeScript starter that follows a featu
 - `src/App.tsx` for providers, startup restore, and app readiness
 - `src/navigation` for root, auth, and tab navigation composition
 - `src/features` for domain modules and feature-owned screens
-- `src/viewModels` for current screen/business logic that has not yet moved into feature folders
 - `src/services` for API and integration layers
 - `src/store` for Redux slices and store configuration
 - `src/components` for reusable UI building blocks
@@ -54,6 +53,12 @@ Current feature screens:
 - `src/features/home/screens/HomeScreen`
 - `src/features/profile/screens/ProfileScreen`
 - `src/features/settings/screens/SettingsScreen`
+
+Current feature hooks:
+
+- `src/features/auth/hooks/useAuthViewModel`
+- `src/features/home/hooks/useHomeViewModel`
+- `src/features/profile/hooks/useProfileViewModel`
 
 ## Development commands
 
