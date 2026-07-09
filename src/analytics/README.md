@@ -11,3 +11,7 @@ Analytics logic is isolated in this folder so instrumentation can be changed wit
 ## Usage
 
 Use the analytics helpers from screens or services when a user action or important lifecycle event should be tracked.
+
+## Guideline
+
+Keep analytics calls thin and event-focused. Do not place business decisions in analytics adapters; feature screens, hooks, or view models should decide when an event happened, and this layer should handle how it is sent.

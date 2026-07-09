@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen } from '../screens/Home';
-import { ProfileScreen } from '../screens/Profile';
-import { SettingsScreen } from '../screens/Settings';
+import { HomeScreen } from '../features/home';
+import { ProfileScreen } from '../features/profile';
+import { SettingsScreen } from '../features/settings';
 import { RouteNames } from './RouteNames';
 import { Icon } from '../components/atoms/Icon';
 import { useTheme } from '../theme/ThemeProvider';
@@ -68,4 +68,3 @@ export const BottomTabNavigator = () => {
     </Tab.Navigator>
   );
 };
-

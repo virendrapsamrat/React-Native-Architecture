@@ -26,6 +26,8 @@
   "settings": {
     "title": "సెట్టింగ్‌లు",
     "language": "భాష",
+    "confirmLanguageTitle": "భాష మార్చాలా?",
+    "confirmLanguageMessage": "మీరు ఖచ్చితంగా ఎంచుకోవాలనుకుంటున్నారా",
     "notifications": "నోటిఫికేషన్‌లు",
     "darkMode": "డార్క్ మోడ్",
     "logout": "లాగ్అవుట్"
@@ -35,6 +37,7 @@
     "error": "ఏదో తప్పు జరిగింది",
     "retry": "మళ్ళీ ప్రయత్నించండి",
     "save": "సేవ్",
-    "cancel": "రద్దు"
+    "cancel": "రద్దు",
+    "reload": "రీలోడ్"
   }
 }

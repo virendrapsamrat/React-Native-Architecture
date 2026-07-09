@@ -12,12 +12,12 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import { Text } from '../../components/atoms/Text';
-import { Colors } from '../../constants/Colors';
-import { useDebounce } from '../../hooks/useDebounce';
-import { useTheme, type Theme } from '../../theme/ThemeProvider';
-import { useHomeViewModel, type SortOption } from '../../viewModels/HomeViewModel';
-import type { HNHit, HNStoryTag } from '../../types/HNStory';
+import { Text } from '../../../../components/atoms/Text';
+import { Colors } from '../../../../constants/Colors';
+import { useDebounce } from '../../../../hooks/useDebounce';
+import { useTheme, type Theme } from '../../../../theme/ThemeProvider';
+import { useHomeViewModel, type SortOption } from '../../../../viewModels/HomeViewModel';
+import type { HNHit, HNStoryTag } from '../../../../types/HNStory';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 

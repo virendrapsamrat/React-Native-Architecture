@@ -26,6 +26,8 @@
   "settings": {
     "title": "सेटिंग्स",
     "language": "भाषा",
+    "confirmLanguageTitle": "भाषा बदलें?",
+    "confirmLanguageMessage": "क्या आप वाकई चुनना चाहते हैं",
     "notifications": "सूचनाएं",
     "darkMode": "डार्क मोड",
     "logout": "लॉगआउट"
@@ -35,6 +37,7 @@
     "error": "कुछ गलत हो गया",
     "retry": "पुनः प्रयास करें",
     "save": "सहेजें",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "reload": "रीलोड"
   }
 }

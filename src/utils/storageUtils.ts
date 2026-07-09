@@ -11,6 +11,13 @@ export const storageUtils = {
 
   removeAuthToken: () => secureStorage.removeItem(StorageKeys.AUTH_TOKEN),
 
+  saveRefreshToken: (token: string) =>
+    secureStorage.setItem(StorageKeys.REFRESH_TOKEN, token),
+
+  getRefreshToken: () => secureStorage.getItem(StorageKeys.REFRESH_TOKEN),
+
+  removeRefreshToken: () => secureStorage.removeItem(StorageKeys.REFRESH_TOKEN),
+
   saveUserData: <T>(data: T) =>
     asyncStorage.setItem(StorageKeys.USER_DATA, data),
 

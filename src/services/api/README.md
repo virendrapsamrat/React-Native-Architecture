@@ -8,3 +8,5 @@ This folder contains the shared API client, endpoint definitions, interceptors, 
 - define reusable endpoints
 - attach shared interceptors
 - provide a query client for data fetching
+
+Use `queryClient.ts` for shared React Query configuration and `ApiClient.ts`/`DemoApiClient.ts` for HTTP access boundaries.

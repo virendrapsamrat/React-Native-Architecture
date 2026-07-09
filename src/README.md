@@ -4,21 +4,33 @@ This folder contains the application implementation. It is structured so that ea
 
 - entry and app bootstrap
 - navigation and routing
-- feature modules
-- screens and view models
+- feature modules and feature-owned screens
+- shared view models and reusable hooks
 - services and storage
 - shared UI, theme, localization, and constants
 
 ## Main flow
 
-1. The app shell in App.tsx initializes providers.
-2. AppNavigator chooses auth or main navigation.
-3. Feature screens consume hooks, view models, and services.
-4. Redux and React Query manage local and remote state.
+1. The app shell in `App.tsx` initializes Redux, React Query, theme, startup restore, and status bar handling.
+2. `AppNavigator` chooses auth or main navigation from auth state.
+3. Feature screens under `src/features/*/screens` compose shared UI and call hooks, view models, and services.
+4. Redux stores app-wide settings/auth state and React Query manages remote data.
+5. Localization is configured in `src/localization`; language changes remount the navigator so translated route labels and screens refresh.
 
 ## Suggested mental model
 
-- UI layer: screens and components
-- Logic layer: hooks, view models, and feature modules
-- Data layer: services, storage, and Redux
-- Platform layer: navigation, permissions, notifications, and analytics
+- UI layer: feature screens and shared components
+- Logic layer: feature hooks, shared hooks, and view models
+- Data layer: services, storage, Redux, and React Query
+- Platform layer: navigation, permissions, notifications, localization, and analytics
+
+## Folder guide
+
+- `features`: domain-owned screens and feature logic
+- `components`: reusable atomic UI pieces
+- `navigation`: route composition only
+- `viewModels`: screen/business logic shared by current screens
+- `hooks`: generic reusable React hooks
+- `services`: API and integration boundaries
+- `store`: Redux store, slices, and typed hooks
+- `localization`: translations and i18n helpers
