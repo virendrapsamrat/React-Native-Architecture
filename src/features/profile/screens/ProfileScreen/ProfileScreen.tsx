@@ -3,7 +3,7 @@ import { ProfileHeader } from '../../../../components/organisms/ProfileHeader';
 import { ProfileStats } from '../../../../components/organisms/ProfileStats';
 import { ProfileInfo } from '../../../../components/molecules/ProfileInfo';
 import { Loader } from '../../../../components/atoms/Loader';
-import { useProfileViewModel } from '../../../../viewModels/ProfileViewModel';
+import { useProfileViewModel } from '../../hooks/useProfileViewModel';
 
 export const ProfileScreen = () => {
   const { profile, user, stats, isLoading } = useProfileViewModel();

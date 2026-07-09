@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useHNStoriesQuery } from '../hooks/useHNStoriesQuery';
-import type { HNHit, HNStoryTag } from '../types/HNStory';
+import { useHNStoriesQuery } from '../../../hooks/useHNStoriesQuery';
+import type { HNHit, HNStoryTag } from '../../../types/HNStory';
 
 export type SortOption = 'newest' | 'points' | 'comments';
 
@@ -22,7 +22,7 @@ export const useHomeViewModel = (searchQuery = '') => {
   // Flatten paginated pages into a single sorted list
   const stories = useMemo<HNHit[]>(() => {
     if (!data) return [];
-    const flat = data.pages.flatMap((page: import('../types/HNStory').HNSearchResponse) => page.hits);
+    const flat = data.pages.flatMap((page: import('../../../types/HNStory').HNSearchResponse) => page.hits);
 
     if (sortBy === 'points') {
       return [...flat].sort((a, b) => (b.points ?? 0) - (a.points ?? 0));
