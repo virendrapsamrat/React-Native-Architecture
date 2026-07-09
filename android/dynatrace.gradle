@@ -1,0 +1,14 @@
+ext['dynatrace.instrumentationFlavor'] = 'react_native'
+apply plugin: 'com.dynatrace.instrumentation'
+
+// AUTO - INSERTED
+
+        dynatrace {
+            configurations {
+                defaultConfig {
+                    autoStart.enabled false
+                }
+            }
+        }
+        
+// AUTO - INSERTED

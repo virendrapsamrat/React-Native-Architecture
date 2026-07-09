@@ -1,10 +1,20 @@
 /* global module */
 
 module.exports = function babelConfig(api) {
-  api.cache(true);
+  const isTest = api.env('test');
 
   return {
-    presets: ['babel-preset-expo'],
+    presets: [
+      [
+        'babel-preset-expo',
+        isTest
+          ? {}
+          : {
+              jsxRuntime: 'automatic',
+              jsxImportSource: '@dynatrace/react-native-plugin',
+            },
+      ],
+    ],
     plugins: [
       [
         'module-resolver',
@@ -15,6 +25,11 @@ module.exports = function babelConfig(api) {
           extensions: ['.ios.ts', '.ios.tsx', '.android.ts', '.android.tsx', '.ts', '.tsx', '.js', '.jsx', '.json'],
         },
       ],
+      ...(
+        isTest
+          ? []
+          : ['@dynatrace/react-native-plugin/instrumentation/BabelPluginDynatrace']
+      ),
     ],
   };
 };

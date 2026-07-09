@@ -71,6 +71,39 @@ import { useHomeViewModel } from '@/features/home/hooks/useHomeViewModel';
 
 Keep `./` imports for files in the same local folder, such as styles or index exports. The alias is configured in `tsconfig.json`, `babel.config.js`, and `jest.config.js`.
 
+## Dynatrace
+
+Dynatrace React Native monitoring is integrated through `@dynatrace/react-native-plugin`.
+The app keeps Dynatrace disabled by default until real environment values are provided.
+
+Required environment values:
+
+```bash
+EXPO_PUBLIC_DYNATRACE_ENABLED=true
+DYNATRACE_APPLICATION_ID=<mobile-app-id>
+DYNATRACE_BEACON_URL=<beacon-url>
+```
+
+After setting or changing Dynatrace values, run:
+
+```bash
+npm run dynatrace:instrument
+npx expo start --clear
+```
+
+Then rebuild the native app:
+
+```bash
+npm run ios
+npm run android
+```
+
+For iOS dependency changes, run CocoaPods install if the native build does not do it automatically:
+
+```bash
+cd ios && pod install
+```
+
 ## Development commands
 
 ```bash

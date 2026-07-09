@@ -193,3 +193,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply from: "../../node_modules/@dynatrace/react-native-plugin/files/plugin-runtime.gradle"
