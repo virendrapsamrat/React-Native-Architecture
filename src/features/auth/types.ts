@@ -1,4 +1,4 @@
-import type { AuthUser } from '../../types/User';
+import type { User } from '../../types/User';
 
 export interface LoginPayload {
   email: string;
@@ -13,10 +13,18 @@ export interface SignupPayload {
 }
 
 export interface AuthState {
-  user: AuthUser | null;
+  user: User | null;
+  token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+}
+
+export interface AuthSession {
+  user: User;
+  token: string;
+  refreshToken?: string | null;
 }
 
 export interface AuthViewModel {

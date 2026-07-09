@@ -10,7 +10,7 @@ import type { LoginPayload, SignupPayload } from '../types';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated, isLoading, error } = useAppSelector(
+  const { user, token, refreshToken, isAuthenticated, isLoading, error } = useAppSelector(
     (state) => state.auth,
   );
 
@@ -30,6 +30,8 @@ export const useAuth = () => {
 
   return {
     user,
+    token,
+    refreshToken,
     isAuthenticated,
     isLoading,
     error,

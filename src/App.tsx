@@ -9,12 +9,12 @@ import { store } from './store/redux/store';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { AppNavigator } from './navigation/AppNavigator';
 import { useAppDispatch } from './store/hooks';
-import { logoutUser, setUser } from './features/auth';
+import { logoutUser, setSession } from './features/auth';
 import { setLanguage, setThemeMode } from './store/redux/settings/settingsSlice';
 import { storageUtils } from './utils/storageUtils';
 import { logoutCoordinator } from './utils/logoutCoordinator';
 import { setLocale } from './localization/i18n';
-import type { AuthUser } from './types/User';
+import type { User } from './types/User';
 
 if (__DEV__ && process.env.EXPO_PUBLIC_IGNORE_LOGBOX === 'true') {
   LogBox.ignoreAllLogs(true);
@@ -50,10 +50,11 @@ const AppStartup = () => {
       }
 
       const authToken = await storageUtils.getAuthToken();
-      const storedUser = await storageUtils.getUserData<AuthUser>();
+      const refreshToken = await storageUtils.getRefreshToken();
+      const storedUser = await storageUtils.getUserData<User>();
 
       if (authToken && storedUser) {
-        dispatch(setUser(storedUser));
+        dispatch(setSession({ user: storedUser, token: authToken, refreshToken }));
       }
 
       setIsReady(true);

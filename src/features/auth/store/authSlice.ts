@@ -2,21 +2,35 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthService } from '../services/authService';
 import { storageUtils } from '../../../utils/storageUtils';
 import type { AuthUser } from '../../../types/User';
-import type { AuthState, LoginPayload, SignupPayload } from '../types';
+import type { AuthSession, AuthState, LoginPayload, SignupPayload } from '../types';
 
 const initialState: AuthState = {
   user: null,
+  token: null,
+  refreshToken: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
 };
 
-const persistAuthUser = async (user: AuthUser) => {
-  await storageUtils.saveAuthToken(user.token);
-  await storageUtils.saveUserData(user);
+const toAuthSession = (authUser: AuthUser): AuthSession => {
+  const { token, refreshToken, ...user } = authUser;
+  return {
+    user,
+    token,
+    refreshToken: refreshToken ?? null,
+  };
 };
 
-export const loginUser = createAsyncThunk<AuthUser, LoginPayload>(
+const persistAuthSession = async (session: AuthSession) => {
+  await storageUtils.saveAuthToken(session.token);
+  if (session.refreshToken) {
+    await storageUtils.saveRefreshToken(session.refreshToken);
+  }
+  await storageUtils.saveUserData(session.user);
+};
+
+export const loginUser = createAsyncThunk<AuthSession, LoginPayload>(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     const response = await AuthService.login(credentials);
@@ -25,12 +39,13 @@ export const loginUser = createAsyncThunk<AuthUser, LoginPayload>(
       return rejectWithValue(response.message ?? 'Login failed');
     }
 
-    await persistAuthUser(response.data);
-    return response.data;
+    const session = toAuthSession(response.data);
+    await persistAuthSession(session);
+    return session;
   },
 );
 
-export const signupUser = createAsyncThunk<AuthUser, SignupPayload>(
+export const signupUser = createAsyncThunk<AuthSession, SignupPayload>(
   'auth/signup',
   async (payload, { rejectWithValue }) => {
     const response = await AuthService.signup(payload);
@@ -39,8 +54,9 @@ export const signupUser = createAsyncThunk<AuthUser, SignupPayload>(
       return rejectWithValue(response.message ?? 'Signup failed');
     }
 
-    await persistAuthUser(response.data);
-    return response.data;
+    const session = toAuthSession(response.data);
+    await persistAuthSession(session);
+    return session;
   },
 );
 
@@ -59,8 +75,10 @@ const authSlice = createSlice({
     clearAuthError: (state) => {
       state.error = null;
     },
-    setUser: (state, action: PayloadAction<AuthUser>) => {
-      state.user = action.payload;
+    setSession: (state, action: PayloadAction<AuthSession>) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.refreshToken = action.payload.refreshToken ?? null;
       state.isAuthenticated = true;
       state.error = null;
     },
@@ -73,7 +91,9 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.refreshToken = action.payload.refreshToken ?? null;
         state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -88,7 +108,9 @@ const authSlice = createSlice({
       })
       .addCase(signupUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.refreshToken = action.payload.refreshToken ?? null;
         state.isAuthenticated = true;
       })
       .addCase(signupUser.rejected, (state, action) => {
@@ -103,16 +125,20 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.isLoading = false;
         state.user = null;
+        state.token = null;
+        state.refreshToken = null;
         state.isAuthenticated = false;
         state.error = null;
       })
       .addCase(logoutUser.rejected, (state) => {
         state.isLoading = false;
         state.user = null;
+        state.token = null;
+        state.refreshToken = null;
         state.isAuthenticated = false;
       });
   },
 });
 
-export const { clearAuthError, setUser } = authSlice.actions;
+export const { clearAuthError, setSession } = authSlice.actions;
 export default authSlice.reducer;

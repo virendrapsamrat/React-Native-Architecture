@@ -17,6 +17,8 @@ export const testMocks = {
 export const mockStore = {
   auth: {
     user: null,
+    token: null,
+    refreshToken: null,
     isAuthenticated: false,
     isLoading: false,
     error: null,
