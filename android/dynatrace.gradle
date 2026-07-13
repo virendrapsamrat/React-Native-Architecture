@@ -6,7 +6,11 @@ apply plugin: 'com.dynatrace.instrumentation'
         dynatrace {
             configurations {
                 defaultConfig {
-                    autoStart.enabled false
+                    autoStart {
+                        applicationId '6D97DE3A936846DE'
+                        beaconUrl 'https://dt-url.net/hr4e0ijr'
+                    }
+                    userOptIn false
                 }
             }
         }

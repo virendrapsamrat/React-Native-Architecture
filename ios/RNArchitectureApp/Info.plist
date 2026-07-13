@@ -73,7 +73,11 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
-    <key>DTXAutoStart</key>
+    <key>DTXApplicationID</key>
+    <string>6D97DE3A936846DE</string>
+    <key>DTXBeaconURL</key>
+    <string>https://dt-url.net/hr4e0ijr</string>
+    <key>DTXUserOptIn</key>
     <false/>
     <key>DTXFlavor</key>
     <string>react_native</string>

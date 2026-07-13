@@ -1,4 +1,31 @@
-/* global module, process */
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* global __dirname, module, process, require */
+
+const fs = require('fs');
+const path = require('path');
+
+const loadDotEnv = () => {
+  const envPath = path.join(__dirname, '.env');
+  if (!fs.existsSync(envPath)) return;
+
+  fs.readFileSync(envPath, 'utf8')
+    .split(/\r?\n/)
+    .forEach((line) => {
+      const trimmedLine = line.trim();
+      if (!trimmedLine || trimmedLine.startsWith('#')) return;
+
+      const separatorIndex = trimmedLine.indexOf('=');
+      if (separatorIndex === -1) return;
+
+      const key = trimmedLine.slice(0, separatorIndex).trim();
+      const value = trimmedLine.slice(separatorIndex + 1).trim();
+      if (!key || process.env[key] !== undefined) return;
+
+      process.env[key] = value.replace(/^['"]|['"]$/g, '');
+    });
+};
+
+loadDotEnv();
 
 const applicationId = process.env.DYNATRACE_APPLICATION_ID;
 const beaconUrl = process.env.DYNATRACE_BEACON_URL;
