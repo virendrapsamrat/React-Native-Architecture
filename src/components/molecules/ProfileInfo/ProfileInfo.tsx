@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Avatar } from '@/components/atoms/Avatar';
 import { Text } from '@/components/atoms/Text';
+import { useTheme } from '@/theme/ThemeProvider';
 import { profileInfoStyles } from './ProfileInfo.styles';
 
 interface ProfileInfoProps {
@@ -14,12 +15,23 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   name,
   email,
   avatarUri,
-}) => (
-  <View style={profileInfoStyles.container}>
-    <Avatar uri={avatarUri} name={name} size="lg" />
-    <View style={profileInfoStyles.info}>
-      <Text variant="h3">{name}</Text>
-      <Text variant="caption">{email}</Text>
+}) => {
+  const { theme } = useTheme();
+
+  return (
+    <View
+      style={[
+        profileInfoStyles.container,
+        { backgroundColor: theme.colors.surface, borderColor: theme.colors.border },
+      ]}
+    >
+      <Avatar uri={avatarUri} name={name} size="lg" />
+      <View style={profileInfoStyles.info}>
+        <Text variant="h3" numberOfLines={1}>{name}</Text>
+        <Text variant="caption" color={theme.colors.textSecondary} numberOfLines={1}>
+          {email}
+        </Text>
+      </View>
     </View>
-  </View>
-);
+  );
+};
