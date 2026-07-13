@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Animated,
+  ActivityIndicator,
   FlatList,
   Linking,
+  Modal,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -10,8 +12,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  ActivityIndicator,
 } from 'react-native';
+import { Icon } from '@/components/atoms/Icon';
 import { Text } from '@/components/atoms/Text';
 import { Colors } from '@/constants/Colors';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -40,6 +42,14 @@ const getDomain = (url: string | null): string | null => {
   }
 };
 
+const getStoryUrl = (story: HNHit): string => {
+  if (story.url) return story.url;
+  return `https://news.ycombinator.com/item?id=${story.story_id ?? story.objectID}`;
+};
+
+const getDiscussionUrl = (story: HNHit): string =>
+  `https://news.ycombinator.com/item?id=${story.story_id ?? story.objectID}`;
+
 // Colours stored as constants, not inline literals
 const TAG_COLORS = {
   ask: '#8B5CF6',
@@ -52,9 +62,10 @@ const TAG_COLORS = {
 interface StoryCardProps {
   item: HNHit;
   index: number;
+  onOpenStory: (story: HNHit) => void;
 }
 
-const StoryCard: React.FC<StoryCardProps> = ({ item, index }) => {
+const StoryCard: React.FC<StoryCardProps> = ({ item, index, onOpenStory }) => {
   const { theme } = useTheme();
 
   // useMemo creates a stable Animated.Value without needing .current in JSX
@@ -90,8 +101,8 @@ const StoryCard: React.FC<StoryCardProps> = ({ item, index }) => {
   }, [scaleAnim]);
 
   const handlePress = useCallback(() => {
-    if (item.url) Linking.openURL(item.url).catch(() => null);
-  }, [item.url]);
+    onOpenStory(item);
+  }, [item, onOpenStory]);
 
   const domain = getDomain(item.url);
   const isAsk = item._tags?.includes('ask_hn');
@@ -154,6 +165,188 @@ const StoryCard: React.FC<StoryCardProps> = ({ item, index }) => {
         </View>
       </Pressable>
     </Animated.View>
+  );
+};
+
+interface StoryModalProps {
+  story: HNHit | null;
+  theme: Theme;
+  onClose: () => void;
+}
+
+const StoryModal: React.FC<StoryModalProps> = ({ story, theme, onClose }) => {
+  const storyUrl = story ? getStoryUrl(story) : null;
+  const discussionUrl = story ? getDiscussionUrl(story) : null;
+  const domain = getDomain(storyUrl);
+
+  const openLink = useCallback((url: string) => {
+    Linking.openURL(url).catch(() => null);
+  }, []);
+
+  return (
+    <Modal
+      animationType="slide"
+      onRequestClose={onClose}
+      presentationStyle="fullScreen"
+      visible={story !== null}
+    >
+      <SafeAreaView style={[styles.storyModalRoot, { backgroundColor: theme.colors.background }]}>
+        <View style={styles.storyModalShell}>
+          <View style={styles.storyModalHeader}>
+            <View style={styles.storyModalTitleWrap}>
+              <Text
+                style={[styles.storyModalTitle, { color: theme.colors.text }]}
+                numberOfLines={1}
+              >
+                {story?.title ?? 'Story'}
+              </Text>
+              {domain !== null && (
+                <Text
+                  style={[styles.storyModalDomain, { color: theme.colors.textSecondary }]}
+                  numberOfLines={1}
+                >
+                  {domain}
+                </Text>
+              )}
+            </View>
+            <Pressable
+              accessibilityLabel="Close story"
+              accessibilityRole="button"
+              onPress={onClose}
+              style={[styles.storyModalClose, { borderColor: theme.colors.border }]}
+            >
+              <Icon name="X" size={22} color={theme.colors.text} />
+            </Pressable>
+          </View>
+
+          <View
+            style={[
+              styles.storyContentFrame,
+              { backgroundColor: theme.colors.surface, borderColor: theme.colors.border },
+            ]}
+          >
+            <ScrollView
+              contentContainerStyle={styles.storyContent}
+              showsVerticalScrollIndicator={false}
+            >
+              <Text style={[styles.storyDetailTitle, { color: theme.colors.text }]}>
+                {story?.title ?? 'Story'}
+              </Text>
+
+              <View style={styles.storyMetaGrid}>
+                <View style={[styles.storyMetaItem, { borderColor: theme.colors.border }]}>
+                  <Text style={[styles.storyMetaLabel, { color: theme.colors.textSecondary }]}>Points</Text>
+                  <Text style={[styles.storyMetaValue, { color: theme.colors.text }]}>
+                    {story?.points ?? 0}
+                  </Text>
+                </View>
+                <View style={[styles.storyMetaItem, { borderColor: theme.colors.border }]}>
+                  <Text style={[styles.storyMetaLabel, { color: theme.colors.textSecondary }]}>Comments</Text>
+                  <Text style={[styles.storyMetaValue, { color: theme.colors.text }]}>
+                    {story?.num_comments ?? 0}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.storySection}>
+                <Text style={[styles.storySectionLabel, { color: theme.colors.textSecondary }]}>Author</Text>
+                <Text style={[styles.storySectionValue, { color: theme.colors.text }]}>
+                  {story?.author ?? 'Unknown'}
+                </Text>
+              </View>
+
+              <View style={styles.storySection}>
+                <Text style={[styles.storySectionLabel, { color: theme.colors.textSecondary }]}>Published</Text>
+                <Text style={[styles.storySectionValue, { color: theme.colors.text }]}>
+                  {story ? timeAgo(story.created_at) : ''}
+                </Text>
+              </View>
+
+              {domain !== null && (
+                <View style={styles.storySection}>
+                  <Text style={[styles.storySectionLabel, { color: theme.colors.textSecondary }]}>Source</Text>
+                  <Text style={[styles.storySectionValue, { color: theme.colors.text }]}>
+                    {domain}
+                  </Text>
+                </View>
+              )}
+
+              {story?._tags?.length ? (
+                <View style={styles.storySection}>
+                  <Text style={[styles.storySectionLabel, { color: theme.colors.textSecondary }]}>Tags</Text>
+                  <View style={styles.storyTagList}>
+                    {story._tags.map((tag) => (
+                      <View
+                        key={tag}
+                        style={[styles.storyTag, { borderColor: theme.colors.border }]}
+                      >
+                        <Text style={[styles.storyTagText, { color: theme.colors.textSecondary }]}>
+                          {tag}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ) : null}
+
+              {storyUrl !== null && (
+                <View style={styles.storySection}>
+                  <Text style={[styles.storySectionLabel, { color: theme.colors.textSecondary }]}>Story URL</Text>
+                  <View
+                    style={[styles.storyLinkButton, { borderColor: theme.colors.border }]}
+                  >
+                    <View style={styles.storyLinkCopyTarget}>
+                      <Text
+                        selectable
+                        style={[styles.storyLinkText, { color: Colors.primary }]}
+                        numberOfLines={2}
+                      >
+                        {storyUrl}
+                      </Text>
+                    </View>
+                    <Pressable
+                      accessibilityLabel="Open story link in browser"
+                      accessibilityRole="link"
+                      onPress={() => openLink(storyUrl)}
+                      style={styles.storyLinkIconButton}
+                    >
+                      <Icon name="ExternalLink" size={18} color={Colors.primary} />
+                    </Pressable>
+                  </View>
+                </View>
+              )}
+
+              {discussionUrl !== null && (
+                <View style={styles.storySection}>
+                  <Text style={[styles.storySectionLabel, { color: theme.colors.textSecondary }]}>HN Discussion</Text>
+                  <View
+                    style={[styles.storyLinkButton, { borderColor: theme.colors.border }]}
+                  >
+                    <View style={styles.storyLinkCopyTarget}>
+                      <Text
+                        selectable
+                        style={[styles.storyLinkText, { color: Colors.primary }]}
+                        numberOfLines={2}
+                      >
+                        {discussionUrl}
+                      </Text>
+                    </View>
+                    <Pressable
+                      accessibilityLabel="Open discussion link in browser"
+                      accessibilityRole="link"
+                      onPress={() => openLink(discussionUrl)}
+                      style={styles.storyLinkIconButton}
+                    >
+                      <Icon name="ExternalLink" size={18} color={Colors.primary} />
+                    </Pressable>
+                  </View>
+                </View>
+              )}
+            </ScrollView>
+          </View>
+        </View>
+      </SafeAreaView>
+    </Modal>
   );
 };
 
@@ -279,6 +472,7 @@ const HomeListHeader: React.FC<HomeListHeaderProps> = ({
 export const HomeScreen: React.FC = () => {
   const { theme } = useTheme();
   const [searchText, setSearchText] = useState('');
+  const [selectedStory, setSelectedStory] = useState<HNHit | null>(null);
   const debouncedSearch = useDebounce(searchText, 400);
 
   const {
@@ -300,12 +494,15 @@ export const HomeScreen: React.FC = () => {
 
   const renderItem = useCallback(
     ({ item, index }: { item: HNHit; index: number }) => (
-      <StoryCard item={item} index={index} />
+      <StoryCard item={item} index={index} onOpenStory={setSelectedStory} />
     ),
     [],
   );
 
-  const keyExtractor = useCallback((item: HNHit) => item.objectID, []);
+  const keyExtractor = useCallback(
+    (item: HNHit, index: number) => `${item.objectID}-${index}`,
+    [],
+  );
 
   const renderFooter = useCallback(() => {
     if (!isFetchingNextPage) return null;
@@ -405,6 +602,11 @@ export const HomeScreen: React.FC = () => {
           removeClippedSubviews
         />
       )}
+      <StoryModal
+        story={selectedStory}
+        theme={theme}
+        onClose={() => setSelectedStory(null)}
+      />
     </SafeAreaView>
   );
 };
@@ -593,6 +795,128 @@ const styles = StyleSheet.create({
     gap: 6,
     marginBottom: 10,
     marginTop: 8,
+  },
+  storyContent: {
+    padding: 18,
+    paddingBottom: 28,
+  },
+  storyContentFrame: {
+    borderRadius: 8,
+    borderWidth: 1,
+    flex: 1,
+    overflow: 'hidden',
+  },
+  storyDetailTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    lineHeight: 30,
+    marginBottom: 18,
+  },
+  storyLinkButton: {
+    alignItems: 'center',
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 10,
+    paddingLeft: 12,
+    paddingRight: 8,
+    paddingVertical: 8,
+  },
+  storyLinkCopyTarget: {
+    flex: 1,
+    paddingVertical: 4,
+  },
+  storyLinkIconButton: {
+    alignItems: 'center',
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  storyLinkText: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  storyMetaGrid: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 18,
+  },
+  storyMetaItem: {
+    borderRadius: 8,
+    borderWidth: 1,
+    flex: 1,
+    padding: 12,
+  },
+  storyMetaLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  storyMetaValue: {
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  storyModalClose: {
+    alignItems: 'center',
+    borderRadius: 8,
+    borderWidth: 1,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  storyModalDomain: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  storyModalHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 12,
+  },
+  storyModalRoot: {
+    flex: 1,
+  },
+  storyModalShell: {
+    flex: 1,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+  },
+  storyModalTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  storyModalTitleWrap: {
+    flex: 1,
+  },
+  storySection: {
+    marginBottom: 18,
+  },
+  storySectionLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 6,
+    textTransform: 'uppercase',
+  },
+  storySectionValue: {
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  storyTag: {
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  storyTagList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  storyTagText: {
+    fontSize: 12,
+    fontWeight: '600',
   },
   tagBadge: {
     borderRadius: 5,

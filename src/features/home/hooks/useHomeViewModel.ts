@@ -19,21 +19,25 @@ export const useHomeViewModel = (searchQuery = '') => {
     error,
   } = useHNStoriesQuery({ query: searchQuery, tag: selectedTag });
 
-  // Flatten paginated pages into a single sorted list
+  // Flatten paginated pages into a single sorted list.
+  // Algolia can return duplicate objectIDs across pages, so keep the first hit.
   const stories = useMemo<HNHit[]>(() => {
     if (!data) return [];
     const flat = data.pages.flatMap((page: import('@/types/HNStory').HNSearchResponse) => page.hits);
+    const unique = Array.from(
+      new Map(flat.map((story) => [story.objectID, story])).values(),
+    );
 
     if (sortBy === 'points') {
-      return [...flat].sort((a, b) => (b.points ?? 0) - (a.points ?? 0));
+      return [...unique].sort((a, b) => (b.points ?? 0) - (a.points ?? 0));
     }
     if (sortBy === 'comments') {
-      return [...flat].sort(
+      return [...unique].sort(
         (a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0),
       );
     }
     // Default: newest — API already sorts by date
-    return flat;
+    return unique;
   }, [data, sortBy]);
 
   const handleRefresh = useCallback(() => {
