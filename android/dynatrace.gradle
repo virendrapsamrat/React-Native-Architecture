@@ -1,0 +1,18 @@
+ext['dynatrace.instrumentationFlavor'] = 'react_native'
+apply plugin: 'com.dynatrace.instrumentation'
+
+// AUTO - INSERTED
+
+        dynatrace {
+            configurations {
+                defaultConfig {
+                    autoStart {
+                        applicationId '6D97DE3A936846DE'
+                        beaconUrl 'https://dt-url.net/hr4e0ijr'
+                    }
+                    userOptIn false
+                }
+            }
+        }
+        
+// AUTO - INSERTED

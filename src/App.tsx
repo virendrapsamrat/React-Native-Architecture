@@ -7,6 +7,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './services/api/queryClient';
 import { store } from './store/redux/store';
 import { ThemeProvider } from './theme/ThemeProvider';
+import { ThemeTransitionOverlay } from './theme/ThemeTransitionOverlay';
 import { AppNavigator } from './navigation/AppNavigator';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { logoutUser, setSession } from './features/auth';
@@ -80,6 +81,7 @@ const AppStartup = () => {
     <>
       <WithThemedStatusBar />
       <AppNavigator key={language} />
+      <ThemeTransitionOverlay />
     </>
   );
 };
