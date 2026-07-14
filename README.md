@@ -87,15 +87,15 @@ DYNATRACE_BEACON_URL=<beacon-url>
 After setting or changing Dynatrace values, run:
 
 ```bash
-npm run dynatrace:instrument
-npx expo start --clear
+bun run dynatrace:instrument
+bunx expo start --clear
 ```
 
 Then rebuild the native app:
 
 ```bash
-npm run ios
-npm run android
+bun run ios
+bun run android
 ```
 
 For iOS dependency changes, run CocoaPods install if the native build does not do it automatically:
@@ -107,15 +107,27 @@ cd ios && pod install
 ## Development commands
 
 ```bash
-npm install
-npm start
-npm run ios
-npm run android
-npm run web
-npm run test
-npm run lint
-npm run typecheck
+bun install
+bun start
+bun run ios
+bun run android
+bun run web
+bun run test
+bun run lint
+bun run typecheck
 ```
+
+## Bun package manager
+
+This repo uses Bun as its package manager and script runner. Keep `bun.lock` committed and use `bun ci` in CI for frozen, reproducible installs.
+
+Integrated Bun features:
+
+- `packageManager` pins the expected Bun version.
+- `bun.lock` replaces `package-lock.json`.
+- `bunfig.toml` keeps React Native-compatible hoisted installs and enables a minimum package release age guard.
+- GitHub Actions installs with `bun ci` and runs checks with `bun run`.
+- Husky hooks use `bun run` and `bunx`.
 
 ## Notes for customization
 

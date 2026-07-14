@@ -1,0 +1,10 @@
+[install]
+# React Native/Expo tooling expects a classic hoisted node_modules layout.
+linker = "hoisted"
+
+# Commit bun.lock for reproducible installs and use `bun ci` in CI.
+saveTextLockfile = true
+
+# Avoid brand-new package releases by default as a light supply-chain guard.
+minimumReleaseAge = 86400
+minimumReleaseAgeExcludes = ["expo", "react", "react-dom", "react-native", "typescript"]
